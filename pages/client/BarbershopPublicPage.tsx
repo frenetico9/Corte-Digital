@@ -8,6 +8,7 @@ import ReviewCard from '../../components/ReviewCard';
 import Button from '../../components/Button';
 import { DAYS_OF_WEEK } from '../../constants';
 import StarRating from '../../components/StarRating';
+import BackButton from '../../components/BackButton';
 
 const BarbershopPublicPage: React.FC = () => {
   const { barbershopId } = useParams<{ barbershopId: string }>();
@@ -96,93 +97,98 @@ const BarbershopPublicPage: React.FC = () => {
       <div className="mt-24"></div>
 
 
-      <div className="container mx-auto px-4 grid md:grid-cols-12 gap-8">
-        {/* Services Section - Main Column */}
-        <section className="md:col-span-8 space-y-8">
-          <div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-primary-blue mb-6 border-b-2 border-primary-blue pb-2">Nossos Serviços</h2>
-            {services.length > 0 ? (
-              <div className="grid sm:grid-cols-2 gap-6">
-                {services.map(service => (
-                  <ServiceCard key={service.id} service={service} barbershopId={barbershop.id} />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center text-gray-600 bg-white p-8 rounded-lg shadow-md">
-                <span className="material-icons-outlined text-5xl text-gray-400 mb-3">sentiment_dissatisfied</span>
-                <p>Nenhum serviço cadastrado no momento. Volte em breve!</p>
-              </div>
-            )}
-          </div>
-           {/* Reviews Section */}
-          {reviews.length > 0 && (
+      <div className="container mx-auto px-4">
+        <div className="mb-6">
+          <BackButton />
+        </div>
+        <div className="grid md:grid-cols-12 gap-8">
+            {/* Services Section - Main Column */}
+            <section className="md:col-span-8 space-y-8">
             <div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-primary-blue mb-8 border-b-2 border-primary-blue pb-2">O que nossos clientes dizem</h2>
-              <div className="space-y-6">
-                {reviews.slice(0,3).map(review => ( // Show up to 3 reviews initially
-                  <ReviewCard key={review.id} review={review} />
-                ))}
-              </div>
-              {reviews.length > 3 && (
-                <div className="text-center mt-8">
-                    {/* TODO: Add "show more reviews" functionality or pagination */}
-                    <p className="text-gray-600 text-sm">Mostrando {Math.min(3, reviews.length)} de {reviews.length} avaliações.</p>
-                </div>
-              )}
-            </div>
-          )}
-          {services.length > 0 && reviews.length === 0 && (
-            <div>
-                <h2 className="text-2xl sm:text-3xl font-bold text-primary-blue mb-6 border-b-2 border-primary-blue pb-2">Avaliações</h2>
-                <div className="text-center text-gray-600 bg-white p-8 rounded-lg shadow-md">
-                  <span className="material-icons-outlined text-5xl text-gray-400 mb-3">rate_review</span>
-                  <p>Esta barbearia ainda não possui avaliações. Seja o primeiro a avaliar após seu agendamento!</p>
-                </div>
-            </div>
-          )}
-        </section>
-
-        {/* Sidebar - Working Hours & Location */}
-        <aside className="md:col-span-4 space-y-6">
-            <div className="bg-white p-6 rounded-xl shadow-xl border border-light-blue sticky top-24"> {/* Sticky sidebar */}
-                <h3 className="text-xl font-semibold text-primary-blue mb-3 flex items-center">
-                  <span className="material-icons-outlined mr-2">schedule</span>
-                  Horário de Funcionamento
-                </h3>
-                <ul className="text-gray-700 space-y-1.5 text-sm">
-                    {barbershop.workingHours.sort((a,b) => a.dayOfWeek - b.dayOfWeek).map(wh => (
-                        <li key={wh.dayOfWeek} className="flex justify-between items-center py-1 border-b border-light-blue last:border-b-0">
-                            <span className="font-medium">{DAYS_OF_WEEK[wh.dayOfWeek]}:</span>
-                            <span className={`font-semibold ${wh.isOpen ? 'text-green-600' : 'text-red-500'}`}>
-                                {wh.isOpen ? `${wh.start} - ${wh.end}` : 'Fechado'}
-                            </span>
-                        </li>
+                <h2 className="text-2xl sm:text-3xl font-bold text-primary-blue mb-6 border-b-2 border-primary-blue pb-2">Nossos Serviços</h2>
+                {services.length > 0 ? (
+                <div className="grid sm:grid-cols-2 gap-6">
+                    {services.map(service => (
+                    <ServiceCard key={service.id} service={service} barbershopId={barbershop.id} />
                     ))}
-                </ul>
-            </div>
-            {/* Placeholder for Map - Could use an iframe or image */}
-            <div className="bg-white p-6 rounded-xl shadow-xl border border-light-blue">
-                <h3 className="text-xl font-semibold text-primary-blue mb-3 flex items-center">
-                  <span className="material-icons-outlined mr-2">location_on</span>
-                  Localização
-                </h3>
-                <p className="text-gray-700 text-sm mb-3">{barbershop.address}</p>
-                <div className="bg-gray-200 h-48 rounded-lg flex items-center justify-center text-gray-500 text-sm">
-                    (Integração com mapa aqui)
                 </div>
-                 <a 
-                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(barbershop.address)}`} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="block mt-3"
-                >
-                    <Button variant="outline" fullWidth>
-                        Ver no Google Maps
-                        <span className="material-icons-outlined text-sm ml-2">open_in_new</span>
-                    </Button>
-                </a>
+                ) : (
+                <div className="text-center text-gray-600 bg-white p-8 rounded-lg shadow-md">
+                    <span className="material-icons-outlined text-5xl text-gray-400 mb-3">sentiment_dissatisfied</span>
+                    <p>Nenhum serviço cadastrado no momento. Volte em breve!</p>
+                </div>
+                )}
             </div>
-        </aside>
+            {/* Reviews Section */}
+            {reviews.length > 0 && (
+                <div>
+                <h2 className="text-2xl sm:text-3xl font-bold text-primary-blue mb-8 border-b-2 border-primary-blue pb-2">O que nossos clientes dizem</h2>
+                <div className="space-y-6">
+                    {reviews.slice(0,3).map(review => ( // Show up to 3 reviews initially
+                    <ReviewCard key={review.id} review={review} />
+                    ))}
+                </div>
+                {reviews.length > 3 && (
+                    <div className="text-center mt-8">
+                        {/* TODO: Add "show more reviews" functionality or pagination */}
+                        <p className="text-gray-600 text-sm">Mostrando {Math.min(3, reviews.length)} de {reviews.length} avaliações.</p>
+                    </div>
+                )}
+                </div>
+            )}
+            {services.length > 0 && reviews.length === 0 && (
+                <div>
+                    <h2 className="text-2xl sm:text-3xl font-bold text-primary-blue mb-6 border-b-2 border-primary-blue pb-2">Avaliações</h2>
+                    <div className="text-center text-gray-600 bg-white p-8 rounded-lg shadow-md">
+                    <span className="material-icons-outlined text-5xl text-gray-400 mb-3">rate_review</span>
+                    <p>Esta barbearia ainda não possui avaliações. Seja o primeiro a avaliar após seu agendamento!</p>
+                    </div>
+                </div>
+            )}
+            </section>
+
+            {/* Sidebar - Working Hours & Location */}
+            <aside className="md:col-span-4 space-y-6">
+                <div className="bg-white p-6 rounded-xl shadow-xl border border-light-blue sticky top-24"> {/* Sticky sidebar */}
+                    <h3 className="text-xl font-semibold text-primary-blue mb-3 flex items-center">
+                    <span className="material-icons-outlined mr-2">schedule</span>
+                    Horário de Funcionamento
+                    </h3>
+                    <ul className="text-gray-700 space-y-1.5 text-sm">
+                        {barbershop.workingHours.sort((a,b) => a.dayOfWeek - b.dayOfWeek).map(wh => (
+                            <li key={wh.dayOfWeek} className="flex justify-between items-center py-1 border-b border-light-blue last:border-b-0">
+                                <span className="font-medium">{DAYS_OF_WEEK[wh.dayOfWeek]}:</span>
+                                <span className={`font-semibold ${wh.isOpen ? 'text-green-600' : 'text-red-500'}`}>
+                                    {wh.isOpen ? `${wh.start} - ${wh.end}` : 'Fechado'}
+                                </span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                {/* Placeholder for Map - Could use an iframe or image */}
+                <div className="bg-white p-6 rounded-xl shadow-xl border border-light-blue">
+                    <h3 className="text-xl font-semibold text-primary-blue mb-3 flex items-center">
+                    <span className="material-icons-outlined mr-2">location_on</span>
+                    Localização
+                    </h3>
+                    <p className="text-gray-700 text-sm mb-3">{barbershop.address}</p>
+                    <div className="bg-gray-200 h-48 rounded-lg flex items-center justify-center text-gray-500 text-sm">
+                        (Integração com mapa aqui)
+                    </div>
+                    <a 
+                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(barbershop.address)}`} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="block mt-3"
+                    >
+                        <Button variant="outline" fullWidth>
+                            Ver no Google Maps
+                            <span className="material-icons-outlined text-sm ml-2">open_in_new</span>
+                        </Button>
+                    </a>
+                </div>
+            </aside>
+        </div>
       </div>
     </div>
   );

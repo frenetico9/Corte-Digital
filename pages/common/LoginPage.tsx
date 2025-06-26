@@ -1,5 +1,6 @@
 
 
+
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from '../../hooks/useForm';
@@ -9,6 +10,7 @@ import Button from '../../components/Button';
 import { NAVALHA_LOGO_URL } from '../../constants';
 import { useNotification } from '../../contexts/NotificationContext';
 import { UserType } from '../../types';
+import BackButton from '../../components/BackButton';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -110,9 +112,9 @@ const LoginPage: React.FC = () => {
               Cadastre sua Barbearia
             </Link>
           </p>
-            <Link to="/" className="mt-6 text-sm text-primary-blue hover:underline block text-center">
-                &larr; Voltar para a Página Inicial
-            </Link>
+            <div className="mt-6 text-center">
+                <BackButton />
+            </div>
         </div>
       </div>
     </div>

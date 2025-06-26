@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../../components/Button';
+import BackButton from '../../components/BackButton';
 
 const NotFoundPage: React.FC = () => {
   return (
@@ -15,12 +16,15 @@ const NotFoundPage: React.FC = () => {
       <p className="text-text-light mb-8 max-w-md mx-auto">
         Oops! Parece que a tesoura escorregou e cortamos o link errado. A página que você procura não existe ou foi movida.
       </p>
-      <Link to="/">
-        <Button variant="primary" size="lg">
-          <span className="material-icons-outlined mr-2">home</span>
-          Voltar para a Página Inicial
-        </Button>
-      </Link>
+      <div className="flex flex-wrap items-center justify-center gap-4">
+        <BackButton />
+        <Link to="/">
+          <Button variant="primary" size="md">
+            <span className="material-icons-outlined mr-2">home</span>
+            Ir para a Página Inicial
+          </Button>
+        </Link>
+      </div>
     </div>
   );
 };

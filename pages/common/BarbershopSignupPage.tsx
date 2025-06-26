@@ -1,5 +1,6 @@
 
 
+
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from '../../hooks/useForm';
@@ -8,6 +9,7 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 import { NAVALHA_LOGO_URL, MIN_PASSWORD_LENGTH } from '../../constants';
 import { useNotification } from '../../contexts/NotificationContext';
+import BackButton from '../../components/BackButton';
 
 const BarbershopSignupPage: React.FC = () => {
   const navigate = useNavigate();
@@ -60,7 +62,7 @@ const BarbershopSignupPage: React.FC = () => {
       {/* Image Column */}
       <div 
         className="hidden md:block md:w-1/2 lg:w-2/3 bg-cover bg-center relative"
-        style={{backgroundImage: "url('https://source.unsplash.com/800x1200/?barbershop,storefront,entrance')"}}
+        style={{backgroundImage: "url('https://i.imgur.com/ANaRyNn.png')"}}
       >
         <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-end p-12 text-white">
             <h2 className="text-4xl font-bold mb-3">Transforme a gestão do seu negócio.</h2>
@@ -164,6 +166,9 @@ const BarbershopSignupPage: React.FC = () => {
               Cadastre-se como Cliente
             </Link>
           </p>
+           <div className="mt-6 text-center">
+            <BackButton />
+          </div>
         </div>
       </div>
     </div>

@@ -1,21 +1,24 @@
 
+
 import { User, UserType, Service, Barber, Appointment, Review, BarbershopProfile, BarbershopSubscription, SubscriptionPlanTier } from '../types';
 import { MOCK_API_DELAY, SUBSCRIPTION_PLANS, DEFAULT_BARBERSHOP_WORKING_HOURS, TIME_SLOTS_INTERVAL, DAYS_OF_WEEK } from '../constants';
 
-import addMinutes from 'date-fns/addMinutes';
-import format from 'date-fns/format';
-import parse from 'date-fns/parse';
-import set from 'date-fns/set';
-import addDays from 'date-fns/addDays';
-import addMonths from 'date-fns/addMonths';
-import getDay from 'date-fns/getDay';
-import isSameDay from 'date-fns/isSameDay';
-import startOfDay from 'date-fns/startOfDay';
-import endOfDay from 'date-fns/endOfDay';
-import eachMinuteOfInterval from 'date-fns/eachMinuteOfInterval';
-import isBefore from 'date-fns/isBefore';
-import isEqual from 'date-fns/isEqual';
-import parseISO from 'date-fns/parseISO';
+import { 
+    addMinutes,
+    format,
+    parse,
+    set,
+    addDays,
+    addMonths,
+    getDay,
+    isSameDay,
+    startOfDay,
+    endOfDay,
+    eachMinuteOfInterval,
+    isBefore,
+    isEqual,
+    parseISO
+} from 'date-fns';
 
 
 // In-memory store
