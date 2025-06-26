@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink, Outlet, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { NAVALHA_SVG_ICON } from '../../constants';
+import { NAVALHA_LOGO_URL } from '../../constants';
 import Button from '../../components/Button';
 
 const ClientSidebarLink: React.FC<{ to: string; children: React.ReactNode; iconName: string }> = ({ to, children, iconName }) => (
@@ -36,7 +36,9 @@ const ClientDashboardLayout: React.FC = () => {
     <div className="flex min-h-screen bg-gray-50">
       <aside className="w-60 bg-white shadow-lg p-4 space-y-2 flex flex-col h-screen sticky top-0">
         <Link to="/" className="flex items-center space-x-2 mb-6 p-2 border-b border-light-blue group">
-          <span className="text-primary-blue w-10 h-10 group-hover:opacity-80 transition-opacity" dangerouslySetInnerHTML={{ __html: NAVALHA_SVG_ICON }} />
+          <div className="bg-primary-blue rounded-full p-2 w-16 h-16 flex items-center justify-center group-hover:opacity-80 transition-opacity flex-shrink-0">
+            <img src={NAVALHA_LOGO_URL} alt="Navalha Digital Logo" className="w-full h-full" />
+          </div>
           <div>
             <h2 className="text-lg font-bold text-primary-blue group-hover:opacity-80 transition-opacity leading-tight">Cliente</h2>
             {user && <p className="text-xs text-text-light truncate max-w-[120px]">{user.name || user.email}</p>}

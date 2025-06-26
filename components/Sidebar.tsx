@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { NAVALHA_SVG_ICON } from '../constants';
+import { NAVALHA_LOGO_URL } from '../constants';
 import { useAuth } from '../hooks/useAuth'; // To display barbershop name
 
 interface SidebarLinkProps {
@@ -35,7 +35,9 @@ const AdminSidebar: React.FC = () => {
   return (
     <aside className="w-64 bg-white shadow-lg p-4 space-y-2 flex flex-col h-screen sticky top-0">
       <Link to="/admin/overview" className="flex items-center space-x-2 mb-6 p-2 border-b border-light-blue group">
-        <span className="text-primary-blue w-10 h-10 group-hover:opacity-80 transition-opacity" dangerouslySetInnerHTML={{ __html: NAVALHA_SVG_ICON }} />
+        <div className="bg-primary-blue rounded-full p-2 w-16 h-16 flex items-center justify-center group-hover:opacity-80 transition-opacity flex-shrink-0">
+            <img src={NAVALHA_LOGO_URL} alt="Navalha Digital Logo" className="w-full h-full" />
+        </div>
         <div>
             <h2 className="text-lg font-bold text-primary-blue group-hover:opacity-80 transition-opacity leading-tight">Painel Admin</h2>
             {barbershopProfile && <p className="text-xs text-text-light truncate max-w-[150px]">{barbershopProfile.name}</p>}

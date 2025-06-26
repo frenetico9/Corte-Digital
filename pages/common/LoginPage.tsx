@@ -1,11 +1,12 @@
 
+
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from '../../hooks/useForm';
 import { useAuth } from '../../hooks/useAuth';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import { NAVALHA_SVG_ICON } from '../../constants';
+import { NAVALHA_LOGO_URL } from '../../constants';
 import { useNotification } from '../../contexts/NotificationContext';
 import { UserType } from '../../types';
 
@@ -50,7 +51,7 @@ const LoginPage: React.FC = () => {
       {/* Image Column */}
       <div 
         className="hidden md:block md:w-1/2 lg:w-2/3 bg-cover bg-center relative"
-        style={{backgroundImage: "url('https://source.unsplash.com/800x1200/?barber,tools,shave')"}}
+        style={{backgroundImage: "url('https://i.imgur.com/0ZF7FfV.png')"}}
       >
         <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-end p-12 text-white">
             <h2 className="text-4xl font-bold mb-3">Sua agenda afiada, seus clientes satisfeitos.</h2>
@@ -62,7 +63,9 @@ const LoginPage: React.FC = () => {
       <div className="w-full md:w-1/2 lg:w-1/3 flex items-center justify-center p-6 sm:p-12">
         <div className="w-full max-w-md">
           <Link to="/" className="flex flex-col items-center mb-6 group">
-            <span className="text-primary-blue w-16 h-16 sm:w-20 sm:h-20 group-hover:opacity-80 transition-opacity" dangerouslySetInnerHTML={{ __html: NAVALHA_SVG_ICON }} />
+            <div className="bg-primary-blue rounded-full p-3 sm:p-4 w-48 h-48 sm:w-56 sm:h-56 flex items-center justify-center group-hover:opacity-80 transition-opacity">
+              <img src={NAVALHA_LOGO_URL} alt="Navalha Digital Logo" className="w-full h-full" />
+            </div>
             <h2 className="mt-4 text-2xl sm:text-3xl font-bold text-center text-primary-blue group-hover:opacity-80 transition-opacity">Login Navalha Digital</h2>
           </Link>
           <p className="mb-6 text-sm text-center text-gray-600">Acesse sua conta para continuar.</p>

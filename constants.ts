@@ -9,11 +9,7 @@ export const TEXT_DARK = '#333333';
 export const TEXT_LIGHT = '#666666';
 export const BORDER_COLOR = '#DDDDDD';
 
-export const NAVALHA_SVG_ICON = `
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full">
-    <path d="M19.528 5.682a1.5 1.5 0 00-1.06-.432H5.532a1.5 1.5 0 00-1.061.432L2.09 8.064a1.5 1.5 0 000 2.121l4.907 4.907a.75.75 0 01.21.53v4.512a.75.75 0 00.75.75H9a.75.75 0 00.75-.75V15.75h4.5v4.384a.75.75 0 00.75.75h1.136a.75.75 0 00.75-.75v-4.512a.75.75 0 01.21-.53l4.908-4.907a1.5 1.5 0 000-2.121l-2.38-2.382zM17.47 9l-3.97 3.97h-3V9h6.97zM6.53 9H9v3.97L5.03 9h1.5z" />
-  </svg>
-`;
+export const NAVALHA_LOGO_URL = 'https://i.imgur.com/OViX73g.png';
 
 export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
   {

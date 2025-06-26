@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../components/Button';
-import { NAVALHA_SVG_ICON } from '../constants';
+import { NAVALHA_LOGO_URL } from '../constants';
 import { useAuth } from '../hooks/useAuth';
 import { BarbershopProfile, Service as ServiceType } from '../types';
 import { mockGetPublicBarbershops, mockGetServicesForBarbershop } from '../services/mockApiService';
@@ -89,7 +89,7 @@ const HomePage: React.FC = () => {
         <div className="absolute inset-0 bg-black bg-opacity-50"></div>
         <div className="container mx-auto px-6 text-center relative z-10">
           <div className="flex justify-center mb-6">
-            <span className="text-6xl w-20 h-20" dangerouslySetInnerHTML={{ __html: NAVALHA_SVG_ICON.replace('class="w-full h-full"', 'class="w-full h-full filter drop-shadow-lg"') }} />
+            <img src={NAVALHA_LOGO_URL} alt="Navalha Digital Logo" className="w-56 h-56 filter drop-shadow-lg" />
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 tracking-tight">Navalha Digital</h1>
           <p className="text-lg md:text-xl mb-10 max-w-2xl mx-auto">

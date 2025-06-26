@@ -1,11 +1,12 @@
 
+
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from '../../hooks/useForm';
 import { useAuth } from '../../hooks/useAuth';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import { NAVALHA_SVG_ICON, MIN_PASSWORD_LENGTH } from '../../constants';
+import { NAVALHA_LOGO_URL, MIN_PASSWORD_LENGTH } from '../../constants';
 import { useNotification } from '../../contexts/NotificationContext';
 
 const ClientSignupPage: React.FC = () => {
@@ -60,7 +61,9 @@ const ClientSignupPage: React.FC = () => {
       <div className="w-full md:w-1/2 lg:w-1/3 flex items-center justify-center p-6 sm:p-12 overflow-y-auto">
         <div className="w-full max-w-md">
           <Link to="/" className="flex flex-col items-center mb-6 group">
-            <span className="text-primary-blue w-16 h-16 sm:w-20 sm:h-20 group-hover:opacity-80 transition-opacity" dangerouslySetInnerHTML={{ __html: NAVALHA_SVG_ICON }} />
+            <div className="bg-primary-blue rounded-full p-3 sm:p-4 w-48 h-48 sm:w-56 sm:h-56 flex items-center justify-center group-hover:opacity-80 transition-opacity">
+              <img src={NAVALHA_LOGO_URL} alt="Navalha Digital Logo" className="w-full h-full" />
+            </div>
             <h2 className="mt-4 text-2xl sm:text-3xl font-bold text-center text-primary-blue group-hover:opacity-80 transition-opacity">Cadastro de Cliente</h2>
           </Link>
           <p className="mb-6 text-sm text-center text-gray-600">Crie sua conta para agendar serviços de forma rápida e fácil.</p>
