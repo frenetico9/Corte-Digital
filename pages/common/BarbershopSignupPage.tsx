@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from '../../hooks/useForm';
@@ -54,103 +55,114 @@ const BarbershopSignupPage: React.FC = () => {
   });
 
   return (
-    <div className="min-h-[calc(100vh-150px)] flex flex-col items-center justify-center bg-gradient-to-br from-white to-light-blue p-4 sm:p-6">
-      <div className="w-full max-w-lg bg-white p-6 sm:p-8 md:p-10 rounded-xl shadow-2xl border border-primary-blue/20">
-        <Link to="/" className="flex flex-col items-center mb-6 group">
-          <span className="text-primary-blue w-16 h-16 sm:w-20 sm:h-20 group-hover:opacity-80 transition-opacity" dangerouslySetInnerHTML={{ __html: NAVALHA_SVG_ICON }} />
-          <h2 className="mt-4 text-2xl sm:text-3xl font-bold text-center text-primary-blue group-hover:opacity-80 transition-opacity">Cadastro de Barbearia</h2>
-        </Link>
-        <p className="mb-6 text-sm text-center text-gray-600">Traga seu negócio para o Navalha Digital e simplifique sua gestão.</p>
-        
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            label="Nome da Barbearia"
-            name="barbershopName"
-            value={values.barbershopName}
-            onChange={handleChange}
-            error={errors.barbershopName}
-            placeholder="Ex: Barbearia Estilo Único"
-            disabled={isSubmitting || authLoading}
-          />
-          <Input
-            label="Nome do Responsável"
-            name="responsibleName"
-            value={values.responsibleName}
-            onChange={handleChange}
-            error={errors.responsibleName}
-            placeholder="Seu nome completo"
-            disabled={isSubmitting || authLoading}
-          />
-          <Input
-            label="E-mail de Contato da Barbearia"
-            name="email"
-            type="email"
-            value={values.email}
-            onChange={handleChange}
-            error={errors.email}
-            placeholder="contato@suabarbearia.com"
-            disabled={isSubmitting || authLoading}
-          />
-          <Input
-            label="Telefone Comercial (com DDD)"
-            name="phone"
-            type="tel"
-            value={values.phone}
-            onChange={handleChange}
-            error={errors.phone}
-            placeholder="(XX) XXXXX-XXXX"
-            disabled={isSubmitting || authLoading}
-          />
-          <Input
-            label="Endereço Completo da Barbearia"
-            name="address"
-            value={values.address}
-            onChange={handleChange}
-            error={errors.address}
-            placeholder="Rua, Número, Bairro, Cidade - UF"
-            disabled={isSubmitting || authLoading}
-          />
-          <Input
-            label="Senha de Acesso ao Painel"
-            name="password"
-            type="password"
-            value={values.password}
-            onChange={handleChange}
-            error={errors.password}
-            placeholder={`Mínimo ${MIN_PASSWORD_LENGTH} caracteres`}
-            disabled={isSubmitting || authLoading}
-          />
-          <Input
-            label="Confirmar Senha"
-            name="confirmPassword"
-            type="password"
-            value={values.confirmPassword}
-            onChange={handleChange}
-            error={errors.confirmPassword}
-            placeholder="Repita a senha criada"
-            disabled={isSubmitting || authLoading}
-          />
-          <Button type="submit" fullWidth isLoading={isSubmitting || authLoading} size="lg" className="mt-2">
-            Cadastrar Barbearia
-          </Button>
-        </form>
-
-        <p className="mt-8 text-xs sm:text-sm text-center text-gray-600">
-          Já possui uma conta de barbearia?{' '}
-          <Link to="/login" className="font-medium text-primary-blue hover:underline">
-            Faça Login
-          </Link>
-        </p>
-         <p className="mt-2 text-xs sm:text-sm text-center text-gray-600">
-          Deseja apenas agendar um serviço?{' '}
-          <Link to="/signup/client" className="font-medium text-primary-blue hover:underline">
-            Cadastre-se como Cliente
-          </Link>
-        </p>
+    <div className="min-h-[calc(100vh-150px)] flex bg-white">
+      {/* Image Column */}
+      <div 
+        className="hidden md:block md:w-1/2 lg:w-2/3 bg-cover bg-center relative"
+        style={{backgroundImage: "url('https://source.unsplash.com/800x1200/?barbershop,storefront,entrance')"}}
+      >
+        <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-end p-12 text-white">
+            <h2 className="text-4xl font-bold mb-3">Transforme a gestão do seu negócio.</h2>
+            <p className="text-lg">Junte-se ao Navalha Digital e leve sua barbearia para o próximo nível.</p>
+        </div>
       </div>
-       <Link to="/" className="mt-6 text-sm text-primary-blue hover:underline block text-center">
-            &larr; Voltar para a Página Inicial
-        </Link>
+
+      {/* Form Column */}
+      <div className="w-full md:w-1/2 lg:w-1/3 flex items-center justify-center p-6 sm:p-12 overflow-y-auto">
+        <div className="w-full max-w-md">
+          <Link to="/" className="flex flex-col items-center mb-6 group">
+            <span className="text-primary-blue w-16 h-16 sm:w-20 sm:h-20 group-hover:opacity-80 transition-opacity" dangerouslySetInnerHTML={{ __html: NAVALHA_SVG_ICON }} />
+            <h2 className="mt-4 text-2xl sm:text-3xl font-bold text-center text-primary-blue group-hover:opacity-80 transition-opacity">Cadastro de Barbearia</h2>
+          </Link>
+          <p className="mb-6 text-sm text-center text-gray-600">Traga seu negócio para o Navalha Digital e simplifique sua gestão.</p>
+          
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <Input
+              label="Nome da Barbearia"
+              name="barbershopName"
+              value={values.barbershopName}
+              onChange={handleChange}
+              error={errors.barbershopName}
+              placeholder="Ex: Barbearia Estilo Único"
+              disabled={isSubmitting || authLoading}
+            />
+            <Input
+              label="Nome do Responsável"
+              name="responsibleName"
+              value={values.responsibleName}
+              onChange={handleChange}
+              error={errors.responsibleName}
+              placeholder="Seu nome completo"
+              disabled={isSubmitting || authLoading}
+            />
+            <Input
+              label="E-mail de Contato da Barbearia"
+              name="email"
+              type="email"
+              value={values.email}
+              onChange={handleChange}
+              error={errors.email}
+              placeholder="contato@suabarbearia.com"
+              disabled={isSubmitting || authLoading}
+            />
+            <Input
+              label="Telefone Comercial (com DDD)"
+              name="phone"
+              type="tel"
+              value={values.phone}
+              onChange={handleChange}
+              error={errors.phone}
+              placeholder="(XX) XXXXX-XXXX"
+              disabled={isSubmitting || authLoading}
+            />
+            <Input
+              label="Endereço Completo da Barbearia"
+              name="address"
+              value={values.address}
+              onChange={handleChange}
+              error={errors.address}
+              placeholder="Rua, Número, Bairro, Cidade - UF"
+              disabled={isSubmitting || authLoading}
+            />
+            <Input
+              label="Senha de Acesso ao Painel"
+              name="password"
+              type="password"
+              value={values.password}
+              onChange={handleChange}
+              error={errors.password}
+              placeholder={`Mínimo ${MIN_PASSWORD_LENGTH} caracteres`}
+              disabled={isSubmitting || authLoading}
+            />
+            <Input
+              label="Confirmar Senha"
+              name="confirmPassword"
+              type="password"
+              value={values.confirmPassword}
+              onChange={handleChange}
+              error={errors.confirmPassword}
+              placeholder="Repita a senha criada"
+              disabled={isSubmitting || authLoading}
+            />
+            <Button type="submit" fullWidth isLoading={isSubmitting || authLoading} size="lg" className="mt-2">
+              Cadastrar Barbearia
+            </Button>
+          </form>
+
+          <p className="mt-8 text-xs sm:text-sm text-center text-gray-600">
+            Já possui uma conta de barbearia?{' '}
+            <Link to="/login" className="font-medium text-primary-blue hover:underline">
+              Faça Login
+            </Link>
+          </p>
+          <p className="mt-2 text-xs sm:text-sm text-center text-gray-600">
+            Deseja apenas agendar um serviço?{' '}
+            <Link to="/signup/client" className="font-medium text-primary-blue hover:underline">
+              Cadastre-se como Cliente
+            </Link>
+          </p>
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,3 +1,5 @@
+
+
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../components/Button';
@@ -83,8 +85,8 @@ const HomePage: React.FC = () => {
   return (
     <div className="text-text-dark space-y-16 md:space-y-24">
       {/* Hero Section */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-primary-blue to-blue-500 text-white rounded-xl shadow-2xl overflow-hidden relative">
-        <div className="absolute inset-0 opacity-10 bg-repeat bg-center" style={{backgroundImage: "url('data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2252%22%20height%3D%2226%22%20viewBox%3D%220%200%2052%2026%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.4%22%3E%3Cpath%20d%3D%22M10%200h1v26h-1zM36%200h1v26h-1z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')"}}></div>
+      <section className="py-20 md:py-28 text-white rounded-xl shadow-2xl overflow-hidden relative bg-cover bg-center" style={{backgroundImage: "url('https://i.imgur.com/LSorq3R.png')"}}>
+        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
         <div className="container mx-auto px-6 text-center relative z-10">
           <div className="flex justify-center mb-6">
             <span className="text-6xl w-20 h-20" dangerouslySetInnerHTML={{ __html: NAVALHA_SVG_ICON.replace('class="w-full h-full"', 'class="w-full h-full filter drop-shadow-lg"') }} />

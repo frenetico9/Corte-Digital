@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from '../../hooks/useForm';
@@ -45,58 +46,72 @@ const LoginPage: React.FC = () => {
   });
 
   return (
-    <div className="min-h-[calc(100vh-150px)] flex flex-col items-center justify-center bg-gradient-to-br from-white to-light-blue p-4 sm:p-6">
-      <div className="w-full max-w-md bg-white p-6 sm:p-8 md:p-10 rounded-xl shadow-2xl border border-primary-blue/20">
-        <Link to="/" className="flex flex-col items-center mb-6 group">
-          <span className="text-primary-blue w-16 h-16 sm:w-20 sm:h-20 group-hover:opacity-80 transition-opacity" dangerouslySetInnerHTML={{ __html: NAVALHA_SVG_ICON }} />
-          <h2 className="mt-4 text-2xl sm:text-3xl font-bold text-center text-primary-blue group-hover:opacity-80 transition-opacity">Login Navalha Digital</h2>
-        </Link>
-        <p className="mb-6 text-sm text-center text-gray-600">Acesse sua conta para continuar.</p>
-        
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <Input
-            label="E-mail"
-            name="email"
-            type="email"
-            value={values.email}
-            onChange={handleChange}
-            error={errors.email}
-            placeholder="seu@email.com"
-            autoComplete="email"
-            leftIcon={<span className="material-icons-outlined text-gray-400">email</span>}
-            disabled={isSubmitting || authLoading}
-          />
-          <Input
-            label="Senha"
-            name="password"
-            type="password"
-            value={values.password}
-            onChange={handleChange}
-            error={errors.password}
-            placeholder="Sua senha"
-            autoComplete="current-password"
-            leftIcon={<span className="material-icons-outlined text-gray-400">lock</span>}
-            disabled={isSubmitting || authLoading}
-          />
-          <Button type="submit" fullWidth isLoading={isSubmitting || authLoading} size="lg">
-            Entrar
-          </Button>
-        </form>
-
-        <p className="mt-8 text-xs sm:text-sm text-center text-gray-600">
-          Não tem uma conta?{' '}
-          <Link to="/signup/client" className="font-medium text-primary-blue hover:underline">
-            Cadastre-se como Cliente
-          </Link>
-          <br className="sm:hidden"/> <span className="hidden sm:inline">ou</span>{' '}
-          <Link to="/signup/barbershop" className="font-medium text-primary-blue hover:underline">
-            Cadastre sua Barbearia
-          </Link>
-        </p>
+    <div className="min-h-[calc(100vh-150px)] flex bg-white">
+      {/* Image Column */}
+      <div 
+        className="hidden md:block md:w-1/2 lg:w-2/3 bg-cover bg-center relative"
+        style={{backgroundImage: "url('https://source.unsplash.com/800x1200/?barber,tools,shave')"}}
+      >
+        <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-end p-12 text-white">
+            <h2 className="text-4xl font-bold mb-3">Sua agenda afiada, seus clientes satisfeitos.</h2>
+            <p className="text-lg">Gerencie sua barbearia ou agende seu próximo corte com facilidade e estilo.</p>
+        </div>
       </div>
-       <Link to="/" className="mt-6 text-sm text-primary-blue hover:underline block text-center">
-            &larr; Voltar para a Página Inicial
-        </Link>
+
+      {/* Form Column */}
+      <div className="w-full md:w-1/2 lg:w-1/3 flex items-center justify-center p-6 sm:p-12">
+        <div className="w-full max-w-md">
+          <Link to="/" className="flex flex-col items-center mb-6 group">
+            <span className="text-primary-blue w-16 h-16 sm:w-20 sm:h-20 group-hover:opacity-80 transition-opacity" dangerouslySetInnerHTML={{ __html: NAVALHA_SVG_ICON }} />
+            <h2 className="mt-4 text-2xl sm:text-3xl font-bold text-center text-primary-blue group-hover:opacity-80 transition-opacity">Login Navalha Digital</h2>
+          </Link>
+          <p className="mb-6 text-sm text-center text-gray-600">Acesse sua conta para continuar.</p>
+          
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <Input
+              label="E-mail"
+              name="email"
+              type="email"
+              value={values.email}
+              onChange={handleChange}
+              error={errors.email}
+              placeholder="seu@email.com"
+              autoComplete="email"
+              leftIcon={<span className="material-icons-outlined text-gray-400">email</span>}
+              disabled={isSubmitting || authLoading}
+            />
+            <Input
+              label="Senha"
+              name="password"
+              type="password"
+              value={values.password}
+              onChange={handleChange}
+              error={errors.password}
+              placeholder="Sua senha"
+              autoComplete="current-password"
+              leftIcon={<span className="material-icons-outlined text-gray-400">lock</span>}
+              disabled={isSubmitting || authLoading}
+            />
+            <Button type="submit" fullWidth isLoading={isSubmitting || authLoading} size="lg">
+              Entrar
+            </Button>
+          </form>
+
+          <p className="mt-8 text-xs sm:text-sm text-center text-gray-600">
+            Não tem uma conta?{' '}
+            <Link to="/signup/client" className="font-medium text-primary-blue hover:underline">
+              Cadastre-se como Cliente
+            </Link>
+            <br className="sm:hidden"/> <span className="hidden sm:inline">ou</span>{' '}
+            <Link to="/signup/barbershop" className="font-medium text-primary-blue hover:underline">
+              Cadastre sua Barbearia
+            </Link>
+          </p>
+            <Link to="/" className="mt-6 text-sm text-primary-blue hover:underline block text-center">
+                &larr; Voltar para a Página Inicial
+            </Link>
+        </div>
+      </div>
     </div>
   );
 };

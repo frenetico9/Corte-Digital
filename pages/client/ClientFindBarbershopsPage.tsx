@@ -5,7 +5,6 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 import Input from '../../components/Input';
 import BarbershopSearchCard from '../../components/BarbershopSearchCard';
 import { useNotification } from '../../contexts/NotificationContext';
-// import { parseISO } from 'date-fns'; // Removed as per error and non-usage in provided code
 
 type SortOption = 'name_asc' | 'name_desc' | 'rating_desc' | 'rating_asc';
 type RatingFilterOption = 'any' | '4+' | '3+';

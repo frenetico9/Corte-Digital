@@ -66,25 +66,35 @@ const BarbershopPublicPage: React.FC = () => {
   return (
     <div className="bg-gray-50 min-h-screen pb-12">
       {/* Header Section */}
-      <header className="bg-gradient-to-br from-primary-blue to-blue-500 text-white py-10 md:py-16 shadow-lg relative mb-10">
-        <div className="absolute inset-0 opacity-10 bg-repeat bg-center" style={{backgroundImage: "url('data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2252%22%20height%3D%2226%22%20viewBox%3D%220%200%2052%2026%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.4%22%3E%3Cpath%20d%3D%22M10%200h1v26h-1zM36%200h1v26h-1z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')"}}></div>
-        <div className="container mx-auto px-4 text-center relative z-10">
+      <header className="relative h-64 md:h-80 w-full mb-10">
+         <div className="absolute inset-0 bg-gradient-to-br from-primary-blue to-blue-500">
+           {barbershop.coverImageUrl && (
+              <img src={barbershop.coverImageUrl} alt={`${barbershop.name} cover`} className="w-full h-full object-cover"/>
+           )}
+         </div>
+         <div className="absolute inset-0 bg-black/50"></div>
+         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-full px-4">
+          <div className="container mx-auto flex flex-col md:flex-row items-center justify-center md:justify-start text-center md:text-left">
             {barbershop.logoUrl ? 
-                <img src={barbershop.logoUrl} alt={`${barbershop.name} Logo`} className="w-28 h-28 sm:w-32 sm:h-32 rounded-full mx-auto mb-4 border-4 border-white object-cover shadow-xl" />
-                : <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full mx-auto mb-4 bg-white flex items-center justify-center text-primary-blue text-5xl font-bold border-4 border-white shadow-xl">{barbershop.name.charAt(0)}</div>
+                <img src={barbershop.logoUrl} alt={`${barbershop.name} Logo`} className="w-28 h-28 sm:w-36 sm:h-36 rounded-full border-4 border-white object-cover shadow-xl flex-shrink-0 bg-white" />
+                : <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-white flex items-center justify-center text-primary-blue text-5xl font-bold border-4 border-white shadow-xl flex-shrink-0">{barbershop.name.charAt(0)}</div>
             }
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">{barbershop.name}</h1>
-          <p className="text-md sm:text-lg mt-2 opacity-90">{barbershop.address}</p>
-          <p className="text-sm sm:text-md mt-1 opacity-90">Telefone: {barbershop.phone}</p>
-          {barbershop.description && <p className="text-sm sm:text-md mt-3 max-w-2xl mx-auto opacity-80">{barbershop.description}</p>}
-          {reviews.length > 0 && (
-            <div className="mt-4 flex items-center justify-center space-x-2">
-              <StarRating value={averageRating} isEditable={false} size={22} color="#FFD700" />
-              <span className="text-md font-semibold">({averageRating.toFixed(1)} de {reviews.length} avaliações)</span>
+            <div className="bg-black/40 backdrop-blur-sm text-white p-4 rounded-b-lg md:rounded-r-lg md:rounded-b-none mt-0 md:-ml-4 md:pt-6">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">{barbershop.name}</h1>
+              {barbershop.description && <p className="text-sm sm:text-md mt-1 max-w-xl opacity-90">{barbershop.description}</p>}
+              {reviews.length > 0 && (
+                <div className="mt-2 flex items-center justify-center md:justify-start space-x-2">
+                  <StarRating value={averageRating} isEditable={false} size={20} color="#FFD700" />
+                  <span className="text-sm font-semibold">({averageRating.toFixed(1)} de {reviews.length} avaliações)</span>
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </div>
+         </div>
       </header>
+      
+      <div className="mt-24"></div>
+
 
       <div className="container mx-auto px-4 grid md:grid-cols-12 gap-8">
         {/* Services Section - Main Column */}

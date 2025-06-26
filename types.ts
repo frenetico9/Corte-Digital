@@ -95,6 +95,7 @@ export interface BarbershopProfile {
   address: string;
   description?: string;
   logoUrl?: string; // URL to logo image
+  coverImageUrl?: string; // URL to cover image
   workingHours: { dayOfWeek: number; start: string; end: string; isOpen: boolean }[];
   // Other settings like cover images, specific theme colors could be added later
 }

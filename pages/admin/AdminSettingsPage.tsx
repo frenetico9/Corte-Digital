@@ -1,6 +1,6 @@
 
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { useForm } from '../../hooks/useForm';
 import Input from '../../components/Input';
@@ -12,19 +12,26 @@ import { DAYS_OF_WEEK, DEFAULT_BARBERSHOP_WORKING_HOURS } from '../../constants'
 
 type SettingsFormData = Omit<BarbershopProfile, 'id' | 'email'>; // Email usually tied to auth user
 
+const initialFormValues: SettingsFormData = {
+  name: '',
+  responsibleName: '',
+  phone: '',
+  address: '',
+  description: '',
+  logoUrl: '',
+  coverImageUrl: '',
+  workingHours: DEFAULT_BARBERSHOP_WORKING_HOURS,
+};
+
 const AdminSettingsPage: React.FC = () => {
   const { user, barbershopProfile, updateBarbershopProfile, loading: authLoading, refreshUserData } = useAuth();
   const { addNotification } = useNotification();
 
-  const initialFormValues: SettingsFormData = {
-    name: '',
-    responsibleName: '',
-    phone: '',
-    address: '',
-    description: '',
-    logoUrl: '',
-    workingHours: DEFAULT_BARBERSHOP_WORKING_HOURS,
-  };
+  const stableSetValues = useCallback((valuesToSet: Partial<SettingsFormData>) => {
+    // This function's identity is stable, safe for useEffect dependency
+    // But we need the actual setter from the hook
+  }, []);
+
 
   const { values, errors, handleChange, handleSubmit, setValues, isSubmitting } = useForm<SettingsFormData>({
     initialValues: initialFormValues,
@@ -56,20 +63,23 @@ const AdminSettingsPage: React.FC = () => {
       return newErrors;
     },
   });
+  
+  const stableSetValuesHook = setValues;
 
   useEffect(() => {
     if (barbershopProfile) {
-      setValues({
+      stableSetValuesHook({
         name: barbershopProfile.name,
         responsibleName: barbershopProfile.responsibleName,
         phone: barbershopProfile.phone,
         address: barbershopProfile.address,
         description: barbershopProfile.description || '',
         logoUrl: barbershopProfile.logoUrl || '',
+        coverImageUrl: barbershopProfile.coverImageUrl || '',
         workingHours: barbershopProfile.workingHours?.length === 7 ? barbershopProfile.workingHours : DEFAULT_BARBERSHOP_WORKING_HOURS,
       });
     } else if (user) { 
-        setValues({
+        stableSetValuesHook({
             ...initialFormValues,
             name: user.barbershopName || '',
             responsibleName: user.name || '',
@@ -77,7 +87,7 @@ const AdminSettingsPage: React.FC = () => {
             address: user.address || '',
         });
     }
-  }, [barbershopProfile, user, setValues, initialFormValues]);
+  }, [barbershopProfile, user, stableSetValuesHook]);
 
   const handleWorkingHourChange = (dayIndex: number, field: 'start' | 'end' | 'isOpen', value: string | boolean) => {
     const newWorkingHours = values.workingHours.map((wh, index) => 
@@ -114,6 +124,8 @@ const AdminSettingsPage: React.FC = () => {
                      <p className="text-xs text-gray-500 mt-1">Se a imagem não aparecer, verifique a URL.</p>
                 </div>
             )}
+            <Input label="URL da Imagem de Capa (Opcional)" name="coverImageUrl" value={values.coverImageUrl} onChange={handleChange} placeholder="https://exemplo.com/capa.jpg" disabled={isSubmitting}/>
+
           </div>
 
           <div>
