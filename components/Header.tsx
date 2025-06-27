@@ -44,8 +44,6 @@ const Header: React.FC = () => {
             <NavLinkItem href="/#">Início</NavLinkItem>
             <NavLinkItem href="/#features">Funcionalidades</NavLinkItem>
             <NavLinkItem href="/#plans">Planos</NavLinkItem>
-            {/* These would link to actual pages if they existed */}
-            <NavLinkItem href="#">Blog</NavLinkItem> 
             <NavLinkItem href="#">Contato</NavLinkItem>
           </nav>
           

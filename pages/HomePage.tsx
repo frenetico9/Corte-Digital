@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../components/Button';
-import { NAVALHA_LOGO_URL, SUBSCRIPTION_PLANS } from '../constants';
+import { NAVALHA_LOGO_URL, DETAILED_FEATURES_COMPARISON } from '../constants';
 import { useAuth } from '../hooks/useAuth';
-import { BarbershopProfile, Service as ServiceType, SubscriptionPlanTier, SubscriptionPlan } from '../types';
+import { BarbershopProfile, Service as ServiceType, SubscriptionPlanTier } from '../types';
 import { mockGetPublicBarbershops, mockGetServicesForBarbershop, mockGetBarbershopSubscription, mockGetReviewsForBarbershop } from '../services/mockApiService';
 import LoadingSpinner from '../components/LoadingSpinner';
 import StarRating from '../components/StarRating';
@@ -42,27 +42,36 @@ const HeroSection = () => (
   </section>
 );
 
-const FeatureCard: React.FC<{ title: string; description: string; iconName: string; delay: number }> = ({ title, description, iconName, delay }) => (
-  <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fade-in-up" style={{animationDelay: `${delay}ms`}}>
-    <div className="flex items-center justify-center w-14 h-14 bg-light-blue text-primary-blue rounded-full mb-5 mx-auto ring-8 ring-white">
-      <span className="material-icons-outlined text-3xl">{iconName}</span>
+const FeatureListItem: React.FC<{ title: string; description: string; iconName: string; }> = ({ title, description, iconName }) => (
+    <div className="flex items-start">
+        <div className="flex-shrink-0 w-12 h-12 bg-light-blue text-primary-blue rounded-full flex items-center justify-center ring-8 ring-surface">
+            <span className="material-icons-outlined text-2xl">{iconName}</span>
+        </div>
+        <div className="ml-4">
+            <h4 className="text-lg font-bold text-text-dark">{title}</h4>
+            <p className="mt-1 text-sm text-text-light">{description}</p>
+        </div>
     </div>
-    <h3 className="text-xl font-bold text-text-dark mb-2 text-center">{title}</h3>
-    <p className="text-text-light text-sm text-center leading-relaxed">{description}</p>
-  </div>
 );
+
 
 const FeaturesSection = () => (
   <section id="features" className="py-20 bg-surface">
     <div className="container mx-auto px-6">
-      <div className="text-center mb-12">
+      <div className="text-center mb-16">
         <h2 className="text-3xl md:text-4xl font-bold text-text-dark">Por que escolher o <span className="text-primary-blue">Navalha Digital</span>?</h2>
-        <p className="text-md text-text-light mt-2 max-w-2xl mx-auto">Tudo que você precisa para uma experiência de agendamento perfeita, de ponta a ponta.</p>
+        <p className="text-md text-text-light mt-2 max-w-3xl mx-auto">Uma solução completa pensada para elevar o nível da sua barbearia e simplificar a vida dos seus clientes.</p>
       </div>
-      <div className="grid md:grid-cols-3 gap-8">
-        <FeatureCard iconName="event_available" title="Agendamento Fácil" description="Clientes agendam em segundos, escolhendo serviço, data e horário com total conveniência, 24/7." delay={200} />
-        <FeatureCard iconName="dashboard_customize" title="Gestão Completa" description="Barbearias gerenciam agenda, equipe, serviços e clientes em um painel de controle intuitivo e poderoso." delay={400} />
-        <FeatureCard iconName="star" title="Destaque-se com PRO" description="Assine o plano PRO para aparecer no topo das buscas, ganhar um selo de confiança e atrair mais clientes." delay={600} />
+      <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div className="space-y-8">
+            <FeatureListItem iconName="event_available" title="Agendamento Fácil 24/7" description="Seus clientes agendam online a qualquer hora, de qualquer lugar, escolhendo serviço, profissional e horário com conveniência total." />
+            <FeatureListItem iconName="dashboard_customize" title="Painel de Gestão Completo" description="Administre sua agenda, equipe, serviços e finanças em um só lugar. Tenha o controle total do seu negócio na palma da sua mão." />
+            <FeatureListItem iconName="notifications_active" title="Notificações Inteligentes" description="Reduza faltas com lembretes automáticos de agendamento via e-mail para seus clientes. Mantenha todos sincronizados." />
+            <FeatureListItem iconName="storefront" title="Página Online Personalizável" description="Crie uma vitrine digital para sua barbearia, mostrando seus serviços, equipe e avaliações. Atraia novos clientes com uma presença online profissional." />
+        </div>
+        <div className="flex items-center justify-center">
+            <img src="https://i.imgur.com/GzC0D9c.png" alt="Ecossistema Navalha Digital em diversos dispositivos" className="max-w-full h-auto rounded-lg animate-fade-in-up" />
+        </div>
       </div>
     </div>
   </section>
@@ -173,56 +182,84 @@ const BarbershopShowcaseSection: React.FC<{isLoggedIn: boolean}> = ({ isLoggedIn
 }
 
 const CheckIcon: React.FC<{className?: string}> = ({className}) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={`w-5 h-5 ${className}`}>
-        <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={`w-6 h-6 ${className}`}>
+        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
     </svg>
 );
 const CrossIcon: React.FC<{className?: string}> = ({className}) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={`w-5 h-5 ${className}`}>
-        <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={`w-6 h-6 ${className}`}>
+      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clipRule="evenodd" />
     </svg>
 );
 
-const PricingPlanCard: React.FC<{ plan: SubscriptionPlan, isRecommended?: boolean }> = ({ plan, isRecommended }) => (
-    <div className={`relative bg-white p-8 rounded-2xl shadow-lg border-2 transition-all duration-300 ${isRecommended ? 'border-primary-blue scale-105' : 'border-transparent'}`}>
-        {isRecommended && (
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary-blue text-white text-xs font-bold px-4 py-1 rounded-full">MAIS RECOMENDADO</div>
-        )}
-        <h3 className="text-2xl font-bold text-text-dark text-center">{plan.name}</h3>
-        <p className="text-center text-text-light text-sm mb-4">{plan.id === 'pro' ? 'Para negócios que querem crescer' : 'Para começar a organizar'}</p>
-        <p className="text-5xl font-extrabold text-text-dark text-center my-6">
-            R$ {plan.price.toFixed(2).replace('.', ',')}
-            {plan.price > 0 && <span className="text-base font-medium text-text-light">/mês</span>}
-        </p>
-        <Link to="/signup/barbershop">
-            <Button fullWidth variant={isRecommended ? 'primary' : 'outline'}>{isRecommended ? 'Começar com PRO' : 'Começar grátis'}</Button>
-        </Link>
-        <ul className="space-y-3 mt-8 text-sm">
-            {plan.features.map((feature, index) => (
-                <li key={index} className="flex items-start">
-                    <CheckIcon className="text-green-500 mr-3 flex-shrink-0 mt-0.5" />
-                    <span className="text-text-light">{feature}</span>
-                </li>
-            ))}
-        </ul>
-    </div>
-);
+const renderFeatureValue = (value: boolean | string) => {
+    if (typeof value === 'boolean') {
+        return value ? <CheckIcon className="text-green-500 mx-auto" /> : <CrossIcon className="text-gray-400 mx-auto" />;
+    }
+    return <span className="font-semibold text-text-dark">{value}</span>;
+};
 
 
-const PricingSection = () => (
-    <section id="plans" className="py-20 bg-surface">
-        <div className="container mx-auto px-6">
-            <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-bold text-text-dark">Planos Feitos para <span className="text-primary-blue">Sua Barbearia</span></h2>
-                <p className="text-md text-text-light mt-2">Escolha o plano que melhor se adapta ao seu momento e cresça conosco.</p>
+const PricingSection = () => {
+    const categories = [...new Set(DETAILED_FEATURES_COMPARISON.map(f => f.category))];
+
+    return (
+        <section id="plans" className="py-20 bg-surface">
+            <div className="container mx-auto px-6">
+                <div className="text-center mb-12">
+                    <h2 className="text-3xl md:text-4xl font-bold text-text-dark">Compare nossos <span className="text-primary-blue">Planos</span></h2>
+                    <p className="text-md text-text-light mt-2 max-w-2xl mx-auto">Escolha o plano que melhor se adapta ao seu momento e cresça conosco.</p>
+                </div>
+                <div className="max-w-5xl mx-auto">
+                    <div className="bg-white shadow-xl rounded-2xl overflow-hidden border border-border-color">
+                        <table className="w-full text-sm text-center">
+                            <thead className="bg-white">
+                                <tr>
+                                    <th className="p-6 text-left text-lg font-bold text-text-dark w-1/2">Funcionalidades</th>
+                                    <th className="p-6 text-lg font-bold text-text-dark border-l border-border-color">Grátis</th>
+                                    <th className="p-6 text-lg font-bold text-primary-blue border-l border-border-color relative">
+                                        PRO
+                                        <div className="absolute -top-0 left-1/2 -translate-x-1/2 bg-primary-blue text-white text-xs font-bold px-3 py-1 rounded-b-md">RECOMENDADO</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {categories.map(category => (
+                                    <Fragment key={category}>
+                                        <tr className="bg-surface">
+                                            <td colSpan={3} className="p-3 text-left font-bold text-primary-blue">{category}</td>
+                                        </tr>
+                                        {DETAILED_FEATURES_COMPARISON.filter(f => f.category === category).map(featureItem => (
+                                            <tr key={featureItem.feature} className="border-t border-border-color hover:bg-light-blue/50">
+                                                <td className="p-4 text-left text-text-light">{featureItem.feature}</td>
+                                                <td className="p-4 border-l border-border-color">{renderFeatureValue(featureItem.free)}</td>
+                                                <td className="p-4 border-l border-border-color">{renderFeatureValue(featureItem.pro)}</td>
+                                            </tr>
+                                        ))}
+                                    </Fragment>
+                                ))}
+                            </tbody>
+                             <tfoot className="bg-white">
+                                <tr className="border-t-2 border-primary-blue">
+                                     <td className="p-6 text-left">
+                                        <p className="font-bold text-text-dark">Invista no seu crescimento</p>
+                                        <p className="text-xs text-text-light">Escolha um plano e comece a transformar seu negócio hoje.</p>
+                                     </td>
+                                     <td className="p-6 border-l border-border-color">
+                                        <Link to="/signup/barbershop"><Button variant="outline" fullWidth>Começar Grátis</Button></Link>
+                                     </td>
+                                     <td className="p-6 border-l border-border-color">
+                                        <Link to="/signup/barbershop"><Button variant="primary" fullWidth>Assinar PRO</Button></Link>
+                                     </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
             </div>
-            <div className="grid lg:grid-cols-2 gap-12 max-w-4xl mx-auto items-center">
-                <PricingPlanCard plan={SUBSCRIPTION_PLANS[0]} />
-                <PricingPlanCard plan={SUBSCRIPTION_PLANS[1]} isRecommended />
-            </div>
-        </div>
-    </section>
-);
+        </section>
+    );
+};
 
 
 const HowItWorksSection = () => (

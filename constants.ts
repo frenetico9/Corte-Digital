@@ -19,12 +19,9 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
     appointmentLimit: 20,
     employeeLimit: 1,
     features: [
-      'Até 20 agendamentos por mês',
-      'Cadastro de 1 funcionário',
+      'Funcionalidades essenciais para começar',
       'Página online da barbearia',
-      'Gestão de clientes e serviços',
-      'Suporte via e-mail',
-      'Notificações de agendamento'
+      'Gestão de agendamentos e clientes',
     ],
   },
   {
@@ -34,15 +31,41 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
     appointmentLimit: 'unlimited',
     employeeLimit: 5,
     features: [
-      'Agendamentos ilimitados',
-      'Cadastro de até 5 funcionários',
+      'Tudo do plano Grátis, e mais:',
       'Destaque PRO nas buscas',
-      'Selo Dourado de Confiança',
       'Relatórios e análises avançadas',
       'Suporte prioritário via WhatsApp',
-      'Sem taxas de transação'
     ],
   },
+];
+
+interface FeatureComparison {
+  feature: string;
+  free: boolean | string;
+  pro: boolean | string;
+  category: string;
+}
+
+export const DETAILED_FEATURES_COMPARISON: FeatureComparison[] = [
+    // Essencial
+    { category: 'Essencial', feature: 'Agendamentos por mês', free: 'Até 20', pro: 'Ilimitados' },
+    { category: 'Essencial', feature: 'Cadastro de Funcionários', free: '1', pro: 'Até 5' },
+    { category: 'Essencial', feature: 'Página Online da Barbearia', free: true, pro: true },
+    { category: 'Essencial', feature: 'Gestão de Serviços', free: true, pro: true },
+    { category: 'Essencial', feature: 'Cadastro de Clientes', free: true, pro: true },
+    // Gestão Avançada
+    { category: 'Gestão Avançada', feature: 'Histórico de Agendamentos', free: true, pro: true },
+    { category: 'Gestão Avançada', feature: 'Notificações por Email', free: true, pro: true },
+    { category: 'Gestão Avançada', feature: 'Relatórios de Desempenho', free: false, pro: true },
+    { category: 'Gestão Avançada', feature: 'Controle de Horários por Barbeiro', free: false, pro: true },
+    // Marketing e Crescimento
+    { category: 'Marketing e Crescimento', feature: 'Destaque PRO nas Buscas', free: false, pro: true },
+    { category: 'Marketing e Crescimento', feature: 'Selo Dourado de Confiança', free: false, pro: true },
+    { category: 'Marketing e Crescimento', feature: 'Gestão de Avaliações (Reviews)', free: true, pro: true },
+    { category: 'Marketing e Crescimento', feature: 'Responder Avaliações', free: false, pro: true },
+    // Suporte
+    { category: 'Suporte', feature: 'Suporte via E-mail', free: true, pro: true },
+    { category: 'Suporte', feature: 'Suporte Prioritário (WhatsApp)', free: false, pro: true },
 ];
 
 export const MOCK_API_DELAY = 500; // ms, adjust for testing
