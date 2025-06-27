@@ -23,6 +23,7 @@ model Barbershop {
   name      String
   address   String
   imageUrl  String
+  phone     String
   services  Service[] // Uma barbearia oferece vários serviços
   bookings  Booking[] // Uma barbearia tem vários agendamentos
 }
