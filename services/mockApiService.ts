@@ -54,7 +54,7 @@ let mockReviews: Review[] = [
 ];
 let mockBarbershopSubscriptions: BarbershopSubscription[] = [
     { barbershopId: 'admin1', planId: SubscriptionPlanTier.PRO, status: 'active', startDate: new Date().toISOString(), nextBillingDate: addMonths(new Date(), 1).toISOString() },
-    { barbershopId: 'admin2', planId: SubscriptionPlanTier.PREMIUM, status: 'active', startDate: new Date().toISOString(), nextBillingDate: addMonths(new Date(), 1).toISOString() },
+    { barbershopId: 'admin2', planId: SubscriptionPlanTier.FREE, status: 'active', startDate: new Date().toISOString() },
 ];
 
 

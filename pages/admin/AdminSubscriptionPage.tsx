@@ -34,7 +34,7 @@ const AdminSubscriptionPage: React.FC = () => {
     if(planToSubscribe && planToSubscribe.price > 0) {
         // In a real app, you'd redirect to Stripe/MercadoPago or show a payment form.
         // For this mock, we'll just simulate a delay and success.
-        addNotification({ message: `Redirecionando para pagamento do plano ${planToSubscribe.name}... (Simulado)`, type: 'info' });
+        addNotification({ message: `Processando assinatura do plano ${planToSubscribe.name}... (Simulado)`, type: 'info' });
         await new Promise(resolve => setTimeout(resolve, 2000)); 
     }
 
@@ -48,7 +48,7 @@ const AdminSubscriptionPage: React.FC = () => {
     setSelectedPlanId(null);
   };
 
-  if (authLoading && !barbershopSubscription) return <LoadingSpinner />; // Show spinner if initial load is happening
+  if (authLoading && !barbershopSubscription) return <div className="flex justify-center items-center h-screen"><LoadingSpinner size="lg" /></div>;
 
   const currentPlanDetails = barbershopSubscription 
     ? SUBSCRIPTION_PLANS.find(p => p.id === barbershopSubscription.planId)
@@ -71,7 +71,7 @@ const AdminSubscriptionPage: React.FC = () => {
         </div>
       )}
       
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
         {SUBSCRIPTION_PLANS.map(plan => (
           <SubscriptionPlanCard 
             key={plan.id} 
@@ -91,7 +91,7 @@ const AdminSubscriptionPage: React.FC = () => {
           <>
             <Button variant="secondary" onClick={() => {setShowConfirmModal(false); setSelectedPlanId(null);}}>Cancelar</Button>
             <Button variant="primary" onClick={confirmSubscriptionChange} isLoading={isProcessing}>
-              Confirmar e {SUBSCRIPTION_PLANS.find(p => p.id === selectedPlanId)?.price || 0 > 0 ? 'Pagar' : 'Mudar'}
+              Confirmar
             </Button>
           </>
         }
@@ -99,18 +99,21 @@ const AdminSubscriptionPage: React.FC = () => {
         <p>Você selecionou o plano <span className="font-bold text-primary-blue">{SUBSCRIPTION_PLANS.find(p => p.id === selectedPlanId)?.name}</span>.</p>
         <p className="mt-2">Tem certeza que deseja prosseguir com a alteração?</p>
         {(SUBSCRIPTION_PLANS.find(p => p.id === selectedPlanId)?.price || 0) > 0 && 
-            <p className="mt-2 text-sm text-gray-600">Você será redirecionado para a página de pagamento (simulado).</p>
+            <p className="mt-2 text-sm text-gray-600">A cobrança será feita no seu método de pagamento cadastrado (simulado).</p>
+        }
+        {selectedPlanId === SubscriptionPlanTier.FREE &&
+            <p className="mt-2 text-sm text-yellow-700">Ao mudar para o plano gratuito, você perderá os benefícios do plano PRO no final do seu ciclo de faturamento atual.</p>
         }
       </Modal>
 
       {/* Subscription Management (Cancel, etc.) - Placeholder for more actions */}
       {barbershopSubscription && barbershopSubscription.planId !== SubscriptionPlanTier.FREE && barbershopSubscription.status === 'active' && (
-        <div className="mt-12 p-6 bg-white rounded-lg shadow">
+        <div className="mt-12 p-6 bg-white rounded-lg shadow max-w-4xl mx-auto">
           <h3 className="text-xl font-semibold text-gray-700 mb-3">Gerenciar Plano Atual</h3>
-          <Button variant="danger" onClick={() => addNotification({message: "Função de cancelamento ainda não implementada.", type:"info"})}>
-            Cancelar Assinatura (Simulado)
+          <Button variant="danger" onClick={() => handleSelectPlan(SubscriptionPlanTier.FREE)}>
+            Cancelar Assinatura PRO (Mudar para Grátis)
           </Button>
-          <p className="text-xs text-gray-500 mt-2">O cancelamento será efetivo ao final do período de cobrança atual.</p>
+          <p className="text-xs text-gray-500 mt-2">O cancelamento será efetivado ao final do período de cobrança atual. Você voltará para o plano Grátis.</p>
         </div>
       )}
     </div>

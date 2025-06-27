@@ -65,7 +65,6 @@ export interface Review {
 export enum SubscriptionPlanTier {
   FREE = 'free',
   PRO = 'pro',
-  PREMIUM = 'premium',
 }
 
 export interface SubscriptionPlan {
@@ -111,4 +110,5 @@ export interface BarbershopSearchResultItem extends BarbershopProfile {
   averageRating: number;
   reviewCount: number;
   sampleServices: Pick<Service, 'id' | 'name' | 'price'>[]; 
+  subscriptionTier: SubscriptionPlanTier;
 }

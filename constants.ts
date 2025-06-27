@@ -23,18 +23,10 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
   {
     id: SubscriptionPlanTier.PRO,
     name: 'Plano Pro',
-    price: 29.90,
+    price: 49.90,
     appointmentLimit: 'unlimited',
     employeeLimit: 3,
-    features: ['Agendamentos ilimitados', 'Até 3 funcionários', 'Suporte prioritário', 'Gestão de clientes'],
-  },
-  {
-    id: SubscriptionPlanTier.PREMIUM,
-    name: 'Plano Premium',
-    price: 59.90,
-    appointmentLimit: 'unlimited',
-    employeeLimit: 'unlimited',
-    features: ['Todos os recursos Pro', 'Funcionários ilimitados', 'Lembretes automáticos (simulado)', 'Relatórios avançados (simulado)'],
+    features: ['Destaque PRO nas buscas', 'Selo Dourado de Confiança', 'Agendamentos ilimitados', 'Até 3 funcionários'],
   },
 ];
 

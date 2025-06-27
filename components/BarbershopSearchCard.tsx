@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { BarbershopSearchResultItem } from '../types';
+import { BarbershopSearchResultItem, SubscriptionPlanTier } from '../types';
 import Button from './Button';
 import StarRating from './StarRating';
 
@@ -8,9 +8,21 @@ interface BarbershopSearchCardProps {
   barbershop: BarbershopSearchResultItem;
 }
 
+const ProBadge = () => (
+  <div className="absolute top-2 right-2 bg-gradient-to-br from-amber-400 to-yellow-500 text-white px-2 py-1 rounded-full shadow-lg flex items-center text-xs font-bold z-10">
+    <span className="material-icons-outlined text-sm mr-1" style={{ color: 'white' }}>star</span>
+    PRO
+  </div>
+);
+
 const BarbershopSearchCard: React.FC<BarbershopSearchCardProps> = ({ barbershop }) => {
+  const isPro = barbershop.subscriptionTier === SubscriptionPlanTier.PRO;
+
   return (
-    <div className="bg-white p-5 rounded-xl shadow-lg border border-light-blue hover:shadow-xl hover:border-primary-blue transition-all duration-300 ease-in-out flex flex-col justify-between">
+    <div className={`relative bg-white p-5 rounded-xl shadow-lg border hover:shadow-2xl transition-all duration-300 ease-in-out flex flex-col justify-between
+      ${isPro ? 'border-amber-400 shadow-[0_0_15px_rgba(255,215,0,0.6)]' : 'border-light-blue hover:border-primary-blue'}
+    `}>
+      {isPro && <ProBadge />}
       <div>
         <div className="flex items-start mb-3">
           {barbershop.logoUrl ? (

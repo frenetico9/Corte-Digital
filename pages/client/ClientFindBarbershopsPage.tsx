@@ -1,19 +1,19 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
-import { BarbershopProfile, Service, Review, BarbershopSearchResultItem } from '../../types';
-import { mockGetPublicBarbershops, mockGetServicesForBarbershop, mockGetReviewsForBarbershop } from '../../services/mockApiService';
+import { BarbershopProfile, Service, Review, BarbershopSearchResultItem, SubscriptionPlanTier } from '../../types';
+import { mockGetPublicBarbershops, mockGetServicesForBarbershop, mockGetReviewsForBarbershop, mockGetBarbershopSubscription } from '../../services/mockApiService';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import Input from '../../components/Input';
 import BarbershopSearchCard from '../../components/BarbershopSearchCard';
 import { useNotification } from '../../contexts/NotificationContext';
 
-type SortOption = 'name_asc' | 'name_desc' | 'rating_desc' | 'rating_asc';
+type SortOption = 'relevance' | 'name_asc' | 'name_desc' | 'rating_desc';
 type RatingFilterOption = 'any' | '4+' | '3+';
 
 const ClientFindBarbershopsPage: React.FC = () => {
   const [allBarbershopsData, setAllBarbershopsData] = useState<BarbershopSearchResultItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortOption, setSortOption] = useState<SortOption>('name_asc');
+  const [sortOption, setSortOption] = useState<SortOption>('relevance');
   const [ratingFilter, setRatingFilter] = useState<RatingFilterOption>('any');
   const { addNotification } = useNotification();
 
@@ -29,9 +29,10 @@ const ClientFindBarbershopsPage: React.FC = () => {
 
       const detailedDataPromises = profiles.map(async (profile) => {
         try {
-          const [services, reviews] = await Promise.all([
+          const [services, reviews, subscription] = await Promise.all([
             mockGetServicesForBarbershop(profile.id),
             mockGetReviewsForBarbershop(profile.id),
+            mockGetBarbershopSubscription(profile.id)
           ]);
 
           const activeServices = services.filter(s => s.isActive);
@@ -41,7 +42,8 @@ const ClientFindBarbershopsPage: React.FC = () => {
             ...profile,
             averageRating,
             reviewCount: reviews.length,
-            sampleServices: activeServices.map(s => ({ id: s.id, name: s.name, price: s.price })).slice(0, 3), // Show up to 3 sample services
+            sampleServices: activeServices.map(s => ({ id: s.id, name: s.name, price: s.price })).slice(0, 3),
+            subscriptionTier: subscription?.planId ?? SubscriptionPlanTier.FREE,
           };
         } catch (error) {
            console.error(`Failed to fetch details for ${profile.name}:`, error);
@@ -51,6 +53,7 @@ const ClientFindBarbershopsPage: React.FC = () => {
              averageRating: 0,
              reviewCount: 0,
              sampleServices: [],
+             subscriptionTier: SubscriptionPlanTier.FREE,
            };
         }
       });
@@ -87,22 +90,35 @@ const ClientFindBarbershopsPage: React.FC = () => {
       items = items.filter(shop => shop.averageRating >= minRating);
     }
 
-    // Sort
-    switch (sortOption) {
-      case 'name_asc':
-        items.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      case 'name_desc':
-        items.sort((a, b) => b.name.localeCompare(a.name));
-        break;
-      case 'rating_desc':
-        items.sort((a, b) => b.averageRating - a.averageRating || b.reviewCount - a.reviewCount);
-        break;
-      case 'rating_asc':
-        items.sort((a, b) => a.averageRating - b.averageRating || a.reviewCount - b.reviewCount);
-        break;
+    // Separate PRO from regular
+    const proShops = items.filter(shop => shop.subscriptionTier === SubscriptionPlanTier.PRO);
+    const regularShops = items.filter(shop => shop.subscriptionTier !== SubscriptionPlanTier.PRO);
+
+    const sortFunction = (a: BarbershopSearchResultItem, b: BarbershopSearchResultItem) => {
+        switch (sortOption) {
+            case 'name_asc':
+                return a.name.localeCompare(b.name);
+            case 'name_desc':
+                return b.name.localeCompare(a.name);
+            case 'rating_desc':
+                return b.averageRating - a.averageRating || b.reviewCount - a.reviewCount;
+            case 'relevance': // Default sort: rating
+            default:
+                 return b.averageRating - a.averageRating || b.reviewCount - a.reviewCount;
+        }
     }
-    return items;
+
+    // Sort each group independently if not sorting by relevance
+    if (sortOption !== 'relevance') {
+      proShops.sort(sortFunction);
+      regularShops.sort(sortFunction);
+    } else {
+       // For relevance, we might just sort by rating, but keep PRO on top
+       proShops.sort((a,b) => b.averageRating - a.averageRating || b.reviewCount - a.reviewCount);
+       regularShops.sort((a,b) => b.averageRating - a.averageRating || b.reviewCount - a.reviewCount);
+    }
+
+    return [...proShops, ...regularShops];
   }, [allBarbershopsData, searchTerm, ratingFilter, sortOption]);
 
   if (loading && allBarbershopsData.length === 0) {
@@ -151,10 +167,10 @@ const ClientFindBarbershopsPage: React.FC = () => {
                 onChange={(e) => setSortOption(e.target.value as SortOption)}
                 className="mt-1 block w-full p-2.5 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-blue focus:border-primary-blue text-sm"
               >
+                <option value="relevance">Relevância</option>
                 <option value="name_asc">Nome (A-Z)</option>
                 <option value="name_desc">Nome (Z-A)</option>
                 <option value="rating_desc">Melhor Avaliadas</option>
-                <option value="rating_asc">Pior Avaliadas</option>
               </select>
             </div>
           </div>
@@ -166,7 +182,7 @@ const ClientFindBarbershopsPage: React.FC = () => {
       
       {!loading && filteredAndSortedBarbershops.length === 0 ? (
         <div className="text-center py-12 bg-white shadow-lg rounded-lg border border-light-blue">
-          <span className="material-icons-outlined text-6xl text-primary-blue/50 mb-4">store_mall_directory</span>
+          <span className="material-icons-outlined text-6xl text-primary-blue/50">store_mall_directory</span>
           <p className="text-xl text-gray-600 mb-3">Nenhuma barbearia encontrada.</p>
           <p className="text-sm text-gray-500">Tente ajustar seus termos de busca ou filtros.</p>
         </div>
