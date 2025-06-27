@@ -9,15 +9,20 @@ import ClientSignupPage from './pages/common/ClientSignupPage';
 import BarbershopSignupPage from './pages/common/BarbershopSignupPage';
 import NotFoundPage from './pages/common/NotFoundPage';
 import BarbershopPublicPage from './pages/client/BarbershopPublicPage'; 
-import FeaturesPage from './pages/common/FeaturesPage'; // New Import
-import PlansPage from './pages/common/PlansPage'; // New Import
+import FeaturesPage from './pages/common/FeaturesPage';
+import PlansPage from './pages/common/PlansPage';
 import BookingPage from './pages/client/BookingPage';
+import ContactPage from './pages/common/ContactPage'; // New Import
+import PrivacyPolicyPage from './pages/common/PrivacyPolicyPage'; // New Import
+import TermsOfUsePage from './pages/common/TermsOfUsePage'; // New Import
+import CookiePolicyPage from './pages/common/CookiePolicyPage'; // New Import
+
 
 // Client Pages & Layout
 import ClientDashboardLayout from './pages/client/ClientDashboardLayout';
 import ClientAppointmentsPage from './pages/client/ClientAppointmentsPage';
 import ClientProfilePage from './pages/client/ClientProfilePage';
-import ClientFindBarbershopsPage from './pages/client/ClientFindBarbershopsPage'; // New Import
+import ClientFindBarbershopsPage from './pages/client/ClientFindBarbershopsPage';
 
 // Admin Pages & Layout
 import AdminDashboardLayout from './pages/admin/AdminDashboardLayout';
@@ -82,6 +87,10 @@ const App: React.FC = () => {
           <Route path="/signup/barbershop" element={<BarbershopSignupPage />} />
           <Route path="/features" element={<FeaturesPage />} />
           <Route path="/plans" element={<PlansPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+          <Route path="/terms-of-use" element={<TermsOfUsePage />} />
+          <Route path="/cookie-policy" element={<CookiePolicyPage />} />
           <Route path="/barbershop/:barbershopId" element={<BarbershopPublicPage />} />
           <Route path="/barbershop/:barbershopId/book/:serviceId" element={<BookingPage />} />
         </Route>

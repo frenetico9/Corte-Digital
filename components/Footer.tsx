@@ -64,6 +64,7 @@ const Footer: React.FC = () => {
                     <ul className="space-y-3">
                         <li><FooterLink to="/features">Funcionalidades</FooterLink></li>
                         <li><FooterLink to="/plans">Planos</FooterLink></li>
+                        <li><FooterLink to="/contact">Contato</FooterLink></li>
                         <li><FooterLink to="/signup/barbershop">Para Barbearias</FooterLink></li>
                         <li><FooterLink to="/signup/client">Para Clientes</FooterLink></li>
                     </ul>
@@ -73,9 +74,9 @@ const Footer: React.FC = () => {
                  <div>
                     <h4 className="font-semibold mb-4">Legal</h4>
                     <ul className="space-y-3">
-                        <li><FooterLink to="#">Política de Privacidade</FooterLink></li>
-                        <li><FooterLink to="#">Termos de Uso</FooterLink></li>
-                        <li><FooterLink to="#">Política de Cookies</FooterLink></li>
+                        <li><FooterLink to="/privacy-policy">Política de Privacidade</FooterLink></li>
+                        <li><FooterLink to="/terms-of-use">Termos de Uso</FooterLink></li>
+                        <li><FooterLink to="/cookie-policy">Política de Cookies</FooterLink></li>
                     </ul>
                 </div>
 

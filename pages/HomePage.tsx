@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import Button from '../components/Button';
 import { NAVALHA_LOGO_URL, SUBSCRIPTION_PLANS } from '../constants';
 import { useAuth } from '../hooks/useAuth';
-import { BarbershopProfile, SubscriptionPlan, SubscriptionPlanTier } from '../types';
-import { mockGetPublicBarbershops, mockGetReviewsForBarbershop, mockGetBarbershopSubscription } from '../services/mockApiService';
+import { BarbershopProfile, BarbershopSearchResultItem, SubscriptionPlan, SubscriptionPlanTier } from '../types';
+import { getPublicBarbershops } from '../services/apiService';
 import LoadingSpinner from '../components/LoadingSpinner';
 import StarRating from '../components/StarRating';
 
@@ -82,7 +82,7 @@ const ProBadge: React.FC<{className?: string}> = ({className}) => (
     </div>
 );
 
-const BarbershopShowcaseCard: React.FC<{ barbershop: BarbershopProfile & { subscriptionTier: SubscriptionPlanTier; averageRating: number; reviewCount: number } }> = ({ barbershop }) => {
+const BarbershopShowcaseCard: React.FC<{ barbershop: BarbershopSearchResultItem }> = ({ barbershop }) => {
     const isPro = barbershop.subscriptionTier === SubscriptionPlanTier.PRO;
     return (
         <div className="relative bg-white rounded-xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-2xl hover:scale-105">
@@ -111,7 +111,7 @@ const BarbershopShowcaseCard: React.FC<{ barbershop: BarbershopProfile & { subsc
 };
 
 const BarbershopShowcaseSection: React.FC<{isLoggedIn: boolean}> = ({ isLoggedIn }) => {
-    const [publicBarbershops, setPublicBarbershops] = useState<(BarbershopProfile & { subscriptionTier: SubscriptionPlanTier; averageRating: number; reviewCount: number })[]>([]);
+    const [publicBarbershops, setPublicBarbershops] = useState<BarbershopSearchResultItem[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -119,27 +119,10 @@ const BarbershopShowcaseSection: React.FC<{isLoggedIn: boolean}> = ({ isLoggedIn
         const fetchData = async () => {
             setLoading(true);
             try {
-                const shops = await mockGetPublicBarbershops(3);
-                const detailedShopsPromises = shops.map(async (shop) => {
-                    const [subscription, reviews] = await Promise.all([
-                        mockGetBarbershopSubscription(shop.id),
-                        mockGetReviewsForBarbershop(shop.id)
-                    ]);
-                    const averageRating = reviews.length > 0 ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length : 0;
-                    return {
-                        ...shop,
-                        subscriptionTier: subscription?.planId ?? SubscriptionPlanTier.FREE,
-                        averageRating,
-                        reviewCount: reviews.length,
-                    };
-                });
-                let detailedShops = await Promise.all(detailedShopsPromises);
-                detailedShops.sort((a, b) => {
-                    if (a.subscriptionTier === SubscriptionPlanTier.PRO && b.subscriptionTier !== SubscriptionPlanTier.PRO) return -1;
-                    if (a.subscriptionTier !== SubscriptionPlanTier.PRO && b.subscriptionTier === SubscriptionPlanTier.PRO) return 1;
-                    return b.averageRating - a.averageRating;
-                });
-                setPublicBarbershops(detailedShops);
+                // Use the new apiService to fetch real data
+                const shops = await getPublicBarbershops();
+                // The API already sorts PRO first, so we just take the top 3 for the showcase
+                setPublicBarbershops(shops.slice(0, 3));
             } catch (error) {
                 console.error("Error fetching public barbershops:", error);
             } finally {

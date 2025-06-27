@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
-import { BarbershopProfile, Service, Review, BarbershopSearchResultItem, SubscriptionPlanTier } from '../../types';
-import { mockGetPublicBarbershops, mockGetServicesForBarbershop, mockGetReviewsForBarbershop, mockGetBarbershopSubscription } from '../../services/mockApiService';
+import { BarbershopSearchResultItem, SubscriptionPlanTier } from '../../types';
+import { getPublicBarbershops } from '../../services/apiService'; // Use real API service
 import LoadingSpinner from '../../components/LoadingSpinner';
 import Input from '../../components/Input';
 import BarbershopSearchCard from '../../components/BarbershopSearchCard';
@@ -20,47 +20,9 @@ const ClientFindBarbershopsPage: React.FC = () => {
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const profiles = await mockGetPublicBarbershops(); // Get all
-      if (!profiles || profiles.length === 0) {
-        setAllBarbershopsData([]);
-        setLoading(false);
-        return;
-      }
-
-      const detailedDataPromises = profiles.map(async (profile) => {
-        try {
-          const [services, reviews, subscription] = await Promise.all([
-            mockGetServicesForBarbershop(profile.id),
-            mockGetReviewsForBarbershop(profile.id),
-            mockGetBarbershopSubscription(profile.id)
-          ]);
-
-          const activeServices = services.filter(s => s.isActive);
-          const averageRating = reviews.length > 0 ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length : 0;
-          
-          return {
-            ...profile,
-            averageRating,
-            reviewCount: reviews.length,
-            sampleServices: activeServices.map(s => ({ id: s.id, name: s.name, price: s.price })).slice(0, 3),
-            subscriptionTier: subscription?.planId ?? SubscriptionPlanTier.FREE,
-          };
-        } catch (error) {
-           console.error(`Failed to fetch details for ${profile.name}:`, error);
-           // Return profile with default/empty values for details if sub-fetches fail
-           return {
-             ...profile,
-             averageRating: 0,
-             reviewCount: 0,
-             sampleServices: [],
-             subscriptionTier: SubscriptionPlanTier.FREE,
-           };
-        }
-      });
-      
-      const results = await Promise.all(detailedDataPromises);
-      setAllBarbershopsData(results as BarbershopSearchResultItem[]);
-
+      // Fetch all barbershops from the real API endpoint
+      const results = await getPublicBarbershops();
+      setAllBarbershopsData(results);
     } catch (error) {
       addNotification({ message: 'Erro ao buscar barbearias.', type: 'error' });
       console.error("Error fetching barbershops list:", error);
@@ -78,9 +40,10 @@ const ClientFindBarbershopsPage: React.FC = () => {
 
     // Search
     if (searchTerm) {
+      const lowercasedTerm = searchTerm.toLowerCase();
       items = items.filter(shop =>
-        shop.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        shop.address.toLowerCase().includes(searchTerm.toLowerCase())
+        shop.name.toLowerCase().includes(lowercasedTerm) ||
+        shop.address.toLowerCase().includes(lowercasedTerm)
       );
     }
 
@@ -90,35 +53,30 @@ const ClientFindBarbershopsPage: React.FC = () => {
       items = items.filter(shop => shop.averageRating >= minRating);
     }
 
-    // Separate PRO from regular
-    const proShops = items.filter(shop => shop.subscriptionTier === SubscriptionPlanTier.PRO);
-    const regularShops = items.filter(shop => shop.subscriptionTier !== SubscriptionPlanTier.PRO);
-
+    // Sort
+    // The initial sort (PRO on top) is already handled by the API.
+    // This client-side sort re-orders the full list based on user selection.
     const sortFunction = (a: BarbershopSearchResultItem, b: BarbershopSearchResultItem) => {
+        // Primary sort: always keep PRO shops before free shops
+        if (a.subscriptionTier === 'pro' && b.subscriptionTier !== 'pro') return -1;
+        if (a.subscriptionTier !== 'pro' && b.subscriptionTier === 'pro') return 1;
+
+        // Secondary sort: based on user's choice
         switch (sortOption) {
             case 'name_asc':
                 return a.name.localeCompare(b.name);
             case 'name_desc':
                 return b.name.localeCompare(a.name);
             case 'rating_desc':
-                return b.averageRating - a.averageRating || b.reviewCount - a.reviewCount;
-            case 'relevance': // Default sort: rating
+            case 'relevance': // Default to rating for relevance
             default:
                  return b.averageRating - a.averageRating || b.reviewCount - a.reviewCount;
         }
     }
+    
+    items.sort(sortFunction);
 
-    // Sort each group independently if not sorting by relevance
-    if (sortOption !== 'relevance') {
-      proShops.sort(sortFunction);
-      regularShops.sort(sortFunction);
-    } else {
-       // For relevance, we might just sort by rating, but keep PRO on top
-       proShops.sort((a,b) => b.averageRating - a.averageRating || b.reviewCount - a.reviewCount);
-       regularShops.sort((a,b) => b.averageRating - a.averageRating || b.reviewCount - a.reviewCount);
-    }
-
-    return [...proShops, ...regularShops];
+    return items;
   }, [allBarbershopsData, searchTerm, ratingFilter, sortOption]);
 
   if (loading && allBarbershopsData.length === 0) {

@@ -32,15 +32,7 @@ const Header: React.FC = () => {
             <NavLinkItem to="/">Início</NavLinkItem>
             <NavLinkItem to="/features">Funcionalidades</NavLinkItem>
             <NavLinkItem to="/plans">Planos</NavLinkItem>
-            <a 
-              href="#page-footer" 
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById('page-footer')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="text-sm font-medium text-text-dark hover:text-primary-blue transition-colors duration-200">
-              Contato
-            </a>
+            <NavLinkItem to="/contact">Contato</NavLinkItem>
           </nav>
           
           <div className="flex items-center space-x-2">
