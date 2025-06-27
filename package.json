@@ -2,15 +2,8 @@
   "name": "navalha-digital",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "build": "shx mkdir -p public && shx cp -r components contexts hooks pages services App.tsx constants.ts index.css index.html index.tsx metadata.json types.ts public/"
-  },
   "dependencies": {
-    "@vercel/postgres": "^0.10.0"
-  },
-  "devDependencies": {
-    "@vercel/node": "^3.2.0",
-    "shx": "^0.3.4",
-    "typescript": "^5.4.5"
+    "@neondatabase/serverless": "^0.9.4",
+    "@vercel/node": "^3.2.0"
   }
 }
