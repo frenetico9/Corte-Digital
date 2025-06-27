@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "mkdir public && cp App.tsx constants.ts index.css index.html index.tsx metadata.json types.ts public/ && cp -r components contexts hooks pages services public/"
+    "build": "mkdir -p public && cp -r components contexts hooks pages services public/ && cp App.tsx constants.ts index.css index.html index.tsx metadata.json types.ts public/"
   },
   "dependencies": {
     "@vercel/postgres": "^0.10.0"
