@@ -1,207 +1,302 @@
-
-
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../components/Button';
-import { NAVALHA_LOGO_URL } from '../constants';
+import { NAVALHA_LOGO_URL, SUBSCRIPTION_PLANS } from '../constants';
 import { useAuth } from '../hooks/useAuth';
-import { BarbershopProfile, Service as ServiceType, SubscriptionPlanTier } from '../types';
-import { mockGetPublicBarbershops, mockGetServicesForBarbershop, mockGetBarbershopSubscription } from '../services/mockApiService';
+import { BarbershopProfile, Service as ServiceType, SubscriptionPlanTier, SubscriptionPlan } from '../types';
+import { mockGetPublicBarbershops, mockGetServicesForBarbershop, mockGetBarbershopSubscription, mockGetReviewsForBarbershop } from '../services/mockApiService';
 import LoadingSpinner from '../components/LoadingSpinner';
+import StarRating from '../components/StarRating';
 
-const FeatureCard: React.FC<{ title: string; description: string; iconName: string }> = ({ title, description, iconName }) => (
-  <div className="bg-light-blue p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow transform hover:-translate-y-1">
-    <div className="flex items-center justify-center w-12 h-12 bg-primary-blue text-white rounded-full mb-4 mx-auto">
-      <span className="material-icons-outlined text-2xl">{iconName}</span>
+// --- Sub-components for HomePage ---
+
+const HeroSection = () => (
+  <section className="relative bg-dark-bg text-white overflow-hidden">
+    <div className="absolute inset-0">
+      <img src="https://i.imgur.com/LSorq3R.png" alt="Barbeiro trabalhando" className="w-full h-full object-cover" />
+      <div className="absolute inset-0 bg-black/70"></div>
     </div>
-    <h3 className="text-xl font-semibold text-primary-blue mb-2 text-center">{title}</h3>
-    <p className="text-gray-700 text-sm text-center">{description}</p>
+    <div className="relative container mx-auto px-6 py-24 md:py-32 text-center z-10">
+      <div className="flex justify-center mb-6 animate-fade-in-up">
+        <img src={NAVALHA_LOGO_URL} alt="Navalha Digital Logo" className="w-48 h-48 filter drop-shadow-lg animate-subtle-float" />
+      </div>
+      <h1 className="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight animate-fade-in-up [animation-delay:200ms]">
+        Navalha <span className="text-primary-blue">Digital</span>
+      </h1>
+      <p className="text-lg md:text-xl text-gray-300 mb-10 max-w-3xl mx-auto animate-fade-in-up [animation-delay:400ms]">
+        A plataforma definitiva para agendamento em barbearias. Simples para o cliente, poderosa para o seu negócio.
+      </p>
+      <div className="flex flex-col sm:flex-row justify-center items-center gap-4 animate-fade-in-up [animation-delay:600ms]">
+        <Link to="/signup/client">
+          <Button size="lg" variant="primary" leftIcon={<span className="material-icons-outlined">calendar_today</span>}>
+            Quero Agendar
+          </Button>
+        </Link>
+        <Link to="/signup/barbershop">
+          <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-text-dark" leftIcon={<span className="material-icons-outlined">content_cut</span>}>
+            Sou uma Barbearia
+          </Button>
+        </Link>
+      </div>
+    </div>
+  </section>
+);
+
+const FeatureCard: React.FC<{ title: string; description: string; iconName: string; delay: number }> = ({ title, description, iconName, delay }) => (
+  <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fade-in-up" style={{animationDelay: `${delay}ms`}}>
+    <div className="flex items-center justify-center w-14 h-14 bg-light-blue text-primary-blue rounded-full mb-5 mx-auto ring-8 ring-white">
+      <span className="material-icons-outlined text-3xl">{iconName}</span>
+    </div>
+    <h3 className="text-xl font-bold text-text-dark mb-2 text-center">{title}</h3>
+    <p className="text-text-light text-sm text-center leading-relaxed">{description}</p>
   </div>
 );
 
-const ProBadge = () => (
-    <div className="absolute top-4 right-4 bg-gradient-to-br from-amber-400 to-yellow-500 text-white px-2 py-1 rounded-full shadow-lg flex items-center text-xs font-bold z-10">
-      <span className="material-icons-outlined text-sm mr-1" style={{ color: 'white' }}>star</span>
-      PRO
+const FeaturesSection = () => (
+  <section id="features" className="py-20 bg-surface">
+    <div className="container mx-auto px-6">
+      <div className="text-center mb-12">
+        <h2 className="text-3xl md:text-4xl font-bold text-text-dark">Por que escolher o <span className="text-primary-blue">Navalha Digital</span>?</h2>
+        <p className="text-md text-text-light mt-2 max-w-2xl mx-auto">Tudo que você precisa para uma experiência de agendamento perfeita, de ponta a ponta.</p>
+      </div>
+      <div className="grid md:grid-cols-3 gap-8">
+        <FeatureCard iconName="event_available" title="Agendamento Fácil" description="Clientes agendam em segundos, escolhendo serviço, data e horário com total conveniência, 24/7." delay={200} />
+        <FeatureCard iconName="dashboard_customize" title="Gestão Completa" description="Barbearias gerenciam agenda, equipe, serviços e clientes em um painel de controle intuitivo e poderoso." delay={400} />
+        <FeatureCard iconName="star" title="Destaque-se com PRO" description="Assine o plano PRO para aparecer no topo das buscas, ganhar um selo de confiança e atrair mais clientes." delay={600} />
+      </div>
     </div>
-  );
+  </section>
+);
 
-const BarbershopShowcaseCard: React.FC<{ barbershop: BarbershopProfile & { subscriptionTier: SubscriptionPlanTier }, services: ServiceType[] }> = ({ barbershop, services }) => {
+const ProBadge: React.FC<{className?: string}> = ({className}) => (
+    <div className={`absolute top-0 right-4 bg-gradient-to-br from-amber-400 to-yellow-500 text-white px-3 py-1 rounded-b-lg shadow-lg flex items-center text-xs font-bold z-10 ${className}`}>
+        <span className="material-icons-outlined text-sm mr-1">star</span>
+        PRO
+    </div>
+);
+
+const BarbershopShowcaseCard: React.FC<{ barbershop: BarbershopProfile & { subscriptionTier: SubscriptionPlanTier; averageRating: number; reviewCount: number } }> = ({ barbershop }) => {
     const isPro = barbershop.subscriptionTier === SubscriptionPlanTier.PRO;
     return (
-        <div className={`relative bg-white p-6 rounded-xl shadow-2xl border transform hover:scale-105 transition-transform duration-300 ease-out flex flex-col justify-between
-            ${isPro ? 'border-amber-400 shadow-[0_0_20px_rgba(255,215,0,0.7)]' : 'border-primary-blue/30'}
-        `}>
+        <div className="relative bg-white rounded-xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-2xl hover:scale-105">
             {isPro && <ProBadge />}
-            <div>
-            {barbershop.logoUrl ? 
-                <img src={barbershop.logoUrl} alt={`${barbershop.name} logo`} className="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-4 border-light-blue shadow-md" /> 
-                : <div className="w-24 h-24 rounded-full mx-auto mb-4 bg-gray-200 flex items-center justify-center text-primary-blue text-4xl font-bold border-4 border-light-blue shadow-md">{barbershop.name.charAt(0)}</div>
-            }
-            <h3 className="text-2xl font-bold text-primary-blue text-center mb-2">{barbershop.name}</h3>
-            <p className="text-gray-600 text-center text-xs mb-1 truncate" title={barbershop.address}>{barbershop.address}</p>
-            <p className="text-gray-600 text-center text-xs mb-4">Telefone: {barbershop.phone}</p>
-            
-            {services.length > 0 && (
-                <div className="mb-4">
-                <h4 className="text-xs font-semibold text-primary-blue mb-1 text-center">Principais Serviços:</h4>
-                {services.slice(0, 2).map(service => (
-                    <div key={service.id} className="text-xs text-gray-700 p-1.5 bg-light-blue/70 rounded mb-1 text-center truncate">
-                        {service.name} - R$ {service.price.toFixed(2).replace('.',',')}
+            <div className="h-40 bg-cover bg-center" style={{backgroundImage: `url(${barbershop.coverImageUrl || 'https://source.unsplash.com/400x300/?barbershop'})`}}></div>
+            <div className="p-5">
+                <div className="flex items-center -mt-12 mb-3">
+                    <img src={barbershop.logoUrl || NAVALHA_LOGO_URL} alt={`${barbershop.name} logo`} className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md bg-white"/>
+                    <div className="ml-3 flex-1">
+                        <h3 className="text-lg font-bold text-text-dark truncate">{barbershop.name}</h3>
+                         {barbershop.reviewCount > 0 && (
+                            <div className="flex items-center">
+                                <StarRating value={barbershop.averageRating} isEditable={false} size={16} />
+                                <span className="text-xs text-text-light ml-1.5">({barbershop.averageRating.toFixed(1)})</span>
+                            </div>
+                         )}
                     </div>
-                ))}
-                {services.length > 2 && <p className="text-xs text-primary-blue text-center mt-1">e mais!</p>}
                 </div>
-            )}
+                <p className="text-xs text-text-light truncate mb-4 h-8" title={barbershop.address}>{barbershop.address}</p>
+                <Link to={`/barbershop/${barbershop.id}`}>
+                    <Button variant="primary" fullWidth size="sm">Ver e Agendar</Button>
+                </Link>
             </div>
-
-            <Link to={`/barbershop/${barbershop.id}`} className="mt-auto">
-            <Button variant="primary" fullWidth>Ver Barbearia e Agendar</Button>
-            </Link>
         </div>
     );
 };
 
+const BarbershopShowcaseSection: React.FC<{isLoggedIn: boolean}> = ({ isLoggedIn }) => {
+    const [publicBarbershops, setPublicBarbershops] = useState<(BarbershopProfile & { subscriptionTier: SubscriptionPlanTier; averageRating: number; reviewCount: number })[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if(isLoggedIn) return; // Don't show this section if user is logged in
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                const shops = await mockGetPublicBarbershops(3);
+                const detailedShopsPromises = shops.map(async (shop) => {
+                    const [subscription, reviews] = await Promise.all([
+                        mockGetBarbershopSubscription(shop.id),
+                        mockGetReviewsForBarbershop(shop.id)
+                    ]);
+                    const averageRating = reviews.length > 0 ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length : 0;
+                    return {
+                        ...shop,
+                        subscriptionTier: subscription?.planId ?? SubscriptionPlanTier.FREE,
+                        averageRating,
+                        reviewCount: reviews.length,
+                    };
+                });
+                let detailedShops = await Promise.all(detailedShopsPromises);
+                detailedShops.sort((a, b) => {
+                    if (a.subscriptionTier === SubscriptionPlanTier.PRO && b.subscriptionTier !== SubscriptionPlanTier.PRO) return -1;
+                    if (a.subscriptionTier !== SubscriptionPlanTier.PRO && b.subscriptionTier === SubscriptionPlanTier.PRO) return 1;
+                    return b.averageRating - a.averageRating;
+                });
+                setPublicBarbershops(detailedShops);
+            } catch (error) {
+                console.error("Error fetching public barbershops:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, [isLoggedIn]);
+
+    if (isLoggedIn) return null;
+  
+    return (
+        <section id="barbershops" className="py-20 bg-white">
+            <div className="container mx-auto px-6">
+                <div className="text-center mb-12">
+                    <h2 className="text-3xl md:text-4xl font-bold text-text-dark">Encontre Barbearias <span className="text-primary-blue">Incríveis</span></h2>
+                    <p className="text-md text-text-light mt-2">Descubra os melhores profissionais perto de você.</p>
+                </div>
+                {loading ? <LoadingSpinner label="Carregando barbearias..." /> : (
+                    publicBarbershops.length > 0 ? (
+                        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {publicBarbershops.map(shop => (
+                                <BarbershopShowcaseCard key={shop.id} barbershop={shop} />
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="text-center text-text-light">Nenhuma barbearia para exibir no momento.</p>
+                    )
+                )}
+                 <div className="text-center mt-12">
+                    <Link to="/client/find-barbershops">
+                        <Button variant="outline" size="lg">Ver Todas as Barbearias</Button>
+                    </Link>
+                </div>
+            </div>
+        </section>
+    );
+}
+
+const CheckIcon: React.FC<{className?: string}> = ({className}) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={`w-5 h-5 ${className}`}>
+        <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
+    </svg>
+);
+const CrossIcon: React.FC<{className?: string}> = ({className}) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={`w-5 h-5 ${className}`}>
+        <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+    </svg>
+);
+
+const PricingPlanCard: React.FC<{ plan: SubscriptionPlan, isRecommended?: boolean }> = ({ plan, isRecommended }) => (
+    <div className={`relative bg-white p-8 rounded-2xl shadow-lg border-2 transition-all duration-300 ${isRecommended ? 'border-primary-blue scale-105' : 'border-transparent'}`}>
+        {isRecommended && (
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary-blue text-white text-xs font-bold px-4 py-1 rounded-full">MAIS RECOMENDADO</div>
+        )}
+        <h3 className="text-2xl font-bold text-text-dark text-center">{plan.name}</h3>
+        <p className="text-center text-text-light text-sm mb-4">{plan.id === 'pro' ? 'Para negócios que querem crescer' : 'Para começar a organizar'}</p>
+        <p className="text-5xl font-extrabold text-text-dark text-center my-6">
+            R$ {plan.price.toFixed(2).replace('.', ',')}
+            {plan.price > 0 && <span className="text-base font-medium text-text-light">/mês</span>}
+        </p>
+        <Link to="/signup/barbershop">
+            <Button fullWidth variant={isRecommended ? 'primary' : 'outline'}>{isRecommended ? 'Começar com PRO' : 'Começar grátis'}</Button>
+        </Link>
+        <ul className="space-y-3 mt-8 text-sm">
+            {plan.features.map((feature, index) => (
+                <li key={index} className="flex items-start">
+                    <CheckIcon className="text-green-500 mr-3 flex-shrink-0 mt-0.5" />
+                    <span className="text-text-light">{feature}</span>
+                </li>
+            ))}
+        </ul>
+    </div>
+);
+
+
+const PricingSection = () => (
+    <section id="plans" className="py-20 bg-surface">
+        <div className="container mx-auto px-6">
+            <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold text-text-dark">Planos Feitos para <span className="text-primary-blue">Sua Barbearia</span></h2>
+                <p className="text-md text-text-light mt-2">Escolha o plano que melhor se adapta ao seu momento e cresça conosco.</p>
+            </div>
+            <div className="grid lg:grid-cols-2 gap-12 max-w-4xl mx-auto items-center">
+                <PricingPlanCard plan={SUBSCRIPTION_PLANS[0]} />
+                <PricingPlanCard plan={SUBSCRIPTION_PLANS[1]} isRecommended />
+            </div>
+        </div>
+    </section>
+);
+
+
+const HowItWorksSection = () => (
+    <section id="how-it-works" className="py-20 bg-white">
+        <div className="container mx-auto px-6">
+             <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold text-text-dark">Como Funciona em <span className="text-primary-blue">4 Passos</span></h2>
+                <p className="text-md text-text-light mt-2">Agendar seu próximo corte nunca foi tão fácil.</p>
+            </div>
+            <div className="grid md:grid-cols-2 items-center gap-12">
+                <div className="relative">
+                    <img src="https://i.imgur.com/gK7P6bQ.png" alt="Celular mostrando o app Navalha Digital" className="max-w-xs mx-auto animate-subtle-float" />
+                </div>
+                <div className="space-y-8">
+                    <div className="flex items-start">
+                        <div className="flex-shrink-0 w-12 h-12 rounded-full bg-light-blue text-primary-blue flex items-center justify-center font-bold text-xl ring-8 ring-white">1</div>
+                        <div className="ml-4">
+                            <h4 className="font-bold text-text-dark">Cadastre-se ou Faça Login</h4>
+                            <p className="text-sm text-text-light">Crie sua conta em segundos para salvar suas preferências e agendamentos.</p>
+                        </div>
+                    </div>
+                     <div className="flex items-start">
+                        <div className="flex-shrink-0 w-12 h-12 rounded-full bg-light-blue text-primary-blue flex items-center justify-center font-bold text-xl ring-8 ring-white">2</div>
+                        <div className="ml-4">
+                            <h4 className="font-bold text-text-dark">Encontre Sua Barbearia</h4>
+                            <p className="text-sm text-text-light">Busque por nome, localização ou veja nossas sugestões de barbearias PRO.</p>
+                        </div>
+                    </div>
+                     <div className="flex items-start">
+                        <div className="flex-shrink-0 w-12 h-12 rounded-full bg-light-blue text-primary-blue flex items-center justify-center font-bold text-xl ring-8 ring-white">3</div>
+                        <div className="ml-4">
+                            <h4 className="font-bold text-text-dark">Agende o Serviço</h4>
+                            <p className="text-sm text-text-light">Escolha o serviço, o profissional, a data e o horário que preferir. Tudo online.</p>
+                        </div>
+                    </div>
+                     <div className="flex items-start">
+                        <div className="flex-shrink-0 w-12 h-12 rounded-full bg-light-blue text-primary-blue flex items-center justify-center font-bold text-xl ring-8 ring-white">4</div>
+                        <div className="ml-4">
+                            <h4 className="font-bold text-text-dark">Compareça e Avalie</h4>
+                            <p className="text-sm text-text-light">Vá até a barbearia na hora marcada e, depois, deixe sua avaliação para ajudar a comunidade.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+);
+
+
+const CTASection = () => (
+    <section className="py-20 bg-primary-blue text-white">
+        <div className="container mx-auto px-6 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Pronto para modernizar seu negócio?</h2>
+            <p className="text-lg text-blue-200 mb-8 max-w-2xl mx-auto">
+                Junte-se a centenas de barbearias que já estão transformando sua gestão com o Navalha Digital.
+            </p>
+            <Link to="/signup/barbershop">
+                <Button size="lg" className="bg-white text-primary-blue hover:bg-light-blue transform hover:scale-105">Cadastrar Minha Barbearia Agora</Button>
+            </Link>
+        </div>
+    </section>
+);
 
 const HomePage: React.FC = () => {
   const { user } = useAuth();
-  const [publicBarbershops, setPublicBarbershops] = useState<(BarbershopProfile & {subscriptionTier: SubscriptionPlanTier})[]>([]);
-  const [barbershopServices, setBarbershopServices] = useState<Record<string, ServiceType[]>>({});
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const shops = await mockGetPublicBarbershops(3); 
-        
-        const detailedShopsPromises = shops.map(async (shop) => {
-            const subscription = await mockGetBarbershopSubscription(shop.id);
-            return {
-                ...shop,
-                subscriptionTier: subscription?.planId ?? SubscriptionPlanTier.FREE,
-            };
-        });
-        let detailedShops = await Promise.all(detailedShopsPromises);
-        
-        // Sort to put PRO shops first
-        detailedShops.sort((a, b) => {
-            const aIsPro = a.subscriptionTier === SubscriptionPlanTier.PRO;
-            const bIsPro = b.subscriptionTier === SubscriptionPlanTier.PRO;
-            if (aIsPro && !bIsPro) return -1;
-            if (!aIsPro && bIsPro) return 1;
-            return 0;
-        });
-
-        setPublicBarbershops(detailedShops);
-
-        if (shops.length > 0) {
-            const servicesPromises = shops.map(shop => mockGetServicesForBarbershop(shop.id));
-            const servicesResults = await Promise.all(servicesPromises);
-            
-            const servicesMap: Record<string, ServiceType[]> = {};
-            shops.forEach((shop, index) => {
-                servicesMap[shop.id] = servicesResults[index].filter(s => s.isActive);
-            });
-            setBarbershopServices(servicesMap);
-        }
-
-      } catch (error) {
-        console.error("Error fetching public barbershops:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
+  
   return (
-    <div className="text-text-dark space-y-16 md:space-y-24">
-      {/* Hero Section */}
-      <section className="py-20 md:py-28 text-white rounded-xl shadow-2xl overflow-hidden relative bg-cover bg-center" style={{backgroundImage: "url('https://i.imgur.com/LSorq3R.png')"}}>
-        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-        <div className="container mx-auto px-6 text-center relative z-10">
-          <div className="flex justify-center mb-6">
-            <img src={NAVALHA_LOGO_URL} alt="Navalha Digital Logo" className="w-56 h-56 filter drop-shadow-lg" />
-          </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 tracking-tight">Navalha Digital</h1>
-          <p className="text-lg md:text-xl mb-10 max-w-2xl mx-auto">
-            A plataforma definitiva para agendamento em barbearias. Simples para o cliente, poderosa para o seu negócio.
-          </p>
-          {!user && (
-            <div className="space-y-4 sm:space-y-0 sm:space-x-4">
-              <Link to="/signup/client">
-                <Button size="lg" className="bg-white text-primary-blue hover:bg-light-blue shadow-xl hover:shadow-2xl transform hover:scale-105">Quero Agendar</Button>
-              </Link>
-              <Link to="/signup/barbershop">
-                <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-primary-blue shadow-xl hover:shadow-2xl transform hover:scale-105">Sou uma Barbearia</Button>
-              </Link>
-            </div>
-          )}
-          {user && (
-             <Link to={user.type === 'client' ? "/client/find-barbershops" : "/admin/overview"}>
-                <Button size="lg" className="bg-white text-primary-blue hover:bg-light-blue shadow-xl hover:shadow-2xl transform hover:scale-105">
-                    {user.type === 'client' ? "Encontrar Barbearias" : "Acessar Painel"}
-                </Button>
-              </Link>
-          )}
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section>
-        <h2 className="text-3xl font-bold text-primary-blue text-center mb-12">Por que escolher o Navalha Digital?</h2>
-        <div className="container mx-auto px-6 grid md:grid-cols-3 gap-8">
-          <FeatureCard
-            iconName="event_available"
-            title="Agendamento Fácil"
-            description="Clientes agendam em segundos, escolhendo serviço, data e horário com total conveniência, 24/7."
-          />
-          <FeatureCard
-            iconName="dashboard_customize"
-            title="Gestão Completa"
-            description="Barbearias gerenciam agenda, equipe, serviços, clientes e finanças em um painel intuitivo."
-          />
-          <FeatureCard
-            iconName="star"
-            title="Destaque-se com PRO"
-            description="Assine o plano PRO para aparecer no topo das buscas e atrair mais clientes para sua barbearia."
-          />
-        </div>
-      </section>
-
-      {/* Barbershops Showcase */}
-      {!user?.id && ( 
-        <section className="py-12 bg-gray-50 rounded-lg">
-          <h2 className="text-3xl font-bold text-primary-blue text-center mb-12">Encontre Barbearias Incríveis</h2>
-          {loading ? <LoadingSpinner label="Carregando barbearias..." /> : (
-            publicBarbershops.length > 0 ? (
-              <div className="container mx-auto px-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                {publicBarbershops.map(shop => (
-                  <BarbershopShowcaseCard key={shop.id} barbershop={shop} services={barbershopServices[shop.id] || []} />
-                ))}
-              </div>
-            ) : (
-              <p className="text-center text-gray-600 bg-white p-6 rounded-lg shadow-md">Nenhuma barbearia para exibir no momento. <Link to="/signup/barbershop" className="text-primary-blue hover:underline font-semibold">Cadastre a sua!</Link></p>
-            )
-          )}
-        </section>
-      )}
-
-      {/* Call to Action for Barbershops */}
-      {!user?.id && (
-         <section className="py-16 bg-primary-blue text-white rounded-xl shadow-xl text-center">
-          <div className="container mx-auto px-6">
-            <h2 className="text-3xl font-bold mb-4">Pronto para modernizar sua barbearia?</h2>
-            <p className="text-lg mb-8 max-w-xl mx-auto">
-              Junte-se ao Navalha Digital e transforme a gestão do seu negócio. Comece grátis e veja a diferença!
-            </p>
-            <Link to="/signup/barbershop">
-              <Button size="lg" className="bg-white text-primary-blue hover:bg-light-blue shadow-lg hover:shadow-xl transform hover:scale-105">Cadastrar Minha Barbearia</Button>
-            </Link>
-          </div>
-        </section>
-      )}
+    <div className="bg-white">
+      <HeroSection />
+      <FeaturesSection />
+      <BarbershopShowcaseSection isLoggedIn={!!user} />
+      <PricingSection />
+      <HowItWorksSection />
+      <CTASection />
     </div>
   );
 };

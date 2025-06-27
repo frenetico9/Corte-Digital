@@ -47,7 +47,7 @@ const StarRating: React.FC<StarRatingProps> = ({
   value = 0,
   onChange,
   size = 24,
-  color = "#FFC107", // A more vibrant gold/yellow
+  color = "#FFC700", // Updated to accent-gold
   inactiveColor = "#E0E0E0", // A lighter gray for inactive
   isEditable = true,
   className = "",

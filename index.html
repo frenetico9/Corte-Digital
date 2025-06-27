@@ -1,27 +1,45 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Navalha Digital</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
           extend: {
-            colors: {
-              'primary-blue': '#007BFF',
-              'light-blue': '#E6F0FF',
-              'primary-blue-dark': '#0056b3',
-              'text-dark': '#333333',
-              'text-light': '#666666',
-              'border-color': '#DDDDDD',
-              'white': '#FFFFFF',
-            },
             fontFamily: {
-              sans: ['Roboto', 'Poppins', 'sans-serif'],
+              sans: ['Poppins', 'Roboto', 'sans-serif'],
+            },
+            colors: {
+              'primary-blue': '#0052FF',
+              'primary-blue-dark': '#0040CC',
+              'light-blue': '#E9F0FF',
+              'text-dark': '#111827',
+              'text-light': '#6B7280',
+              'border-color': '#E5E7EB',
+              'white': '#FFFFFF',
+              'dark-bg': '#0D1117', // For the footer
+              'surface': '#F8F9FA', // For light gray sections
+              'accent-gold': '#FFC700', // For PRO features, stars
+            },
+            animation: {
+              'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+              'subtle-float': 'subtleFloat 4s ease-in-out infinite',
+            },
+            keyframes: {
+              fadeInUp: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              subtleFloat: {
+                '0%': { transform: 'translateY(0px)' },
+                '50%': { transform: 'translateY(-10px)' },
+                '100%': { transform: 'translateY(0px)' },
+              }
             }
           }
         }
@@ -43,7 +61,7 @@
 </script>
 <link rel="stylesheet" href="/index.css">
 </head>
-  <body class="bg-white font-sans">
+  <body class="bg-white font-sans antialiased">
     <noscript>Você precisa habilitar o JavaScript para rodar este aplicativo.</noscript>
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>

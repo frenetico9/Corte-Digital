@@ -1,13 +1,13 @@
 import { SubscriptionPlan, SubscriptionPlanTier, BarbershopProfile } from './types';
 
 // Colors (already in tailwind.config, but good for JS reference if needed elsewhere)
-export const PRIMARY_BLUE = '#007BFF';
-export const LIGHT_BLUE = '#E6F0FF';
-export const PRIMARY_BLUE_DARK = '#0056b3';
+export const PRIMARY_BLUE = '#0052FF';
+export const LIGHT_BLUE = '#E9F0FF';
+export const PRIMARY_BLUE_DARK = '#0040CC';
 export const WHITE = '#FFFFFF';
-export const TEXT_DARK = '#333333';
-export const TEXT_LIGHT = '#666666';
-export const BORDER_COLOR = '#DDDDDD';
+export const TEXT_DARK = '#111827';
+export const TEXT_LIGHT = '#6B7280';
+export const BORDER_COLOR = '#E5E7EB';
 
 export const NAVALHA_LOGO_URL = 'https://i.imgur.com/OViX73g.png';
 
@@ -18,15 +18,30 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
     price: 0,
     appointmentLimit: 20,
     employeeLimit: 1,
-    features: ['Até 20 agendamentos/mês', '1 funcionário', 'Página pública da barbearia'],
+    features: [
+      'Até 20 agendamentos por mês',
+      'Cadastro de 1 funcionário',
+      'Página online da barbearia',
+      'Gestão de clientes e serviços',
+      'Suporte via e-mail',
+      'Notificações de agendamento'
+    ],
   },
   {
     id: SubscriptionPlanTier.PRO,
     name: 'Plano Pro',
     price: 49.90,
     appointmentLimit: 'unlimited',
-    employeeLimit: 3,
-    features: ['Destaque PRO nas buscas', 'Selo Dourado de Confiança', 'Agendamentos ilimitados', 'Até 3 funcionários'],
+    employeeLimit: 5,
+    features: [
+      'Agendamentos ilimitados',
+      'Cadastro de até 5 funcionários',
+      'Destaque PRO nas buscas',
+      'Selo Dourado de Confiança',
+      'Relatórios e análises avançadas',
+      'Suporte prioritário via WhatsApp',
+      'Sem taxas de transação'
+    ],
   },
 ];
 

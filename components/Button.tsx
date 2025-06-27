@@ -44,13 +44,13 @@ const Button: React.FC<ButtonProps> = ({
   let sizeStyle = '';
   switch (size) {
     case 'sm':
-      sizeStyle = 'px-3 py-1.5 text-sm';
+      sizeStyle = 'px-4 py-2 text-sm';
       break;
     case 'md':
-      sizeStyle = 'px-5 py-2.5 text-base';
+      sizeStyle = 'px-6 py-2.5 text-base';
       break;
     case 'lg':
-      sizeStyle = 'px-7 py-3 text-lg';
+      sizeStyle = 'px-8 py-3 text-lg';
       break;
   }
   
