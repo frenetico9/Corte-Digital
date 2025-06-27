@@ -1,4 +1,4 @@
-// Arquivo: api/barbershops.js (VERSÃO ATUALIZADA)
+// Arquivo: api/barbershops.js (CORRIGIDO)
 
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
@@ -9,19 +9,17 @@ export default async function handler(req, res) {
   if (req.method === 'GET') {
     try {
       const barbershops = await prisma.barbershop.findMany({
-        // A MÁGICA ESTÁ AQUI:
-        // Incluímos os serviços relacionados a cada barbearia na mesma consulta.
         include: {
           services: {
-            where: { isActive: true }, // Opcional: traz apenas serviços ativos
-            take: 3 // Opcional: limita a 3 serviços para o showcase da home
+            // A linha 'where' foi removida.
+            take: 3 // Vamos manter a limitação de 3 serviços para a home page.
           }
         }
       });
       return res.status(200).json(barbershops);
     } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: "Erro ao buscar barbearias." });
+      console.error("ERRO NA API BARBERSHOPS:", error); // Adicionei um log para depuração futura
+      return res.status(500).json({ message: "Erro ao buscar barbearias.", details: error.message });
     }
   }
 
