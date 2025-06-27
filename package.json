@@ -3,11 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "echo \"Build placeholder to override Vercel's auto-detection. API functions will be built automatically.\""
+    "build": "mkdir public && cp App.tsx constants.ts index.css index.html index.tsx metadata.json types.ts public/ && cp -r components contexts hooks pages services public/"
   },
   "dependencies": {
-    "@neondatabase/serverless": "^0.9.4",
-    "@vercel/node": "^3.2.0",
     "@vercel/postgres": "^0.10.0"
+  },
+  "devDependencies": {
+    "@vercel/node": "^3.2.0",
+    "typescript": "^5.4.5"
   }
 }
