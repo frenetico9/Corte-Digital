@@ -4,10 +4,10 @@ import { NAVALHA_LOGO_URL } from '../constants';
 import { useAuth } from '../hooks/useAuth';
 import Button from './Button';
 
-const NavLinkItem: React.FC<{ href: string; children: React.ReactNode }> = ({ href, children }) => (
-  <a href={href} className="text-sm font-medium text-text-dark hover:text-primary-blue transition-colors duration-200">
+const NavLinkItem: React.FC<{ to: string; children: React.ReactNode }> = ({ to, children }) => (
+  <Link to={to} className="text-sm font-medium text-text-dark hover:text-primary-blue transition-colors duration-200">
     {children}
-  </a>
+  </Link>
 );
 
 const Header: React.FC = () => {
@@ -19,18 +19,6 @@ const Header: React.FC = () => {
     navigate('/');
   };
   
-  const scrollTo = (selector: string) => {
-    const element = document.querySelector(selector);
-    if(element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      navigate('/');
-      setTimeout(() => {
-         document.querySelector(selector)?.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
-    }
-  }
-
   return (
     <header className="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -41,10 +29,18 @@ const Header: React.FC = () => {
           </Link>
           
           <nav className="hidden md:flex items-center space-x-8">
-            <NavLinkItem href="/#">Início</NavLinkItem>
-            <NavLinkItem href="/#features">Funcionalidades</NavLinkItem>
-            <NavLinkItem href="/#plans">Planos</NavLinkItem>
-            <NavLinkItem href="#">Contato</NavLinkItem>
+            <NavLinkItem to="/">Início</NavLinkItem>
+            <NavLinkItem to="/features">Funcionalidades</NavLinkItem>
+            <NavLinkItem to="/plans">Planos</NavLinkItem>
+            <a 
+              href="#page-footer" 
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById('page-footer')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="text-sm font-medium text-text-dark hover:text-primary-blue transition-colors duration-200">
+              Contato
+            </a>
           </nav>
           
           <div className="flex items-center space-x-2">

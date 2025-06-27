@@ -9,6 +9,8 @@ import ClientSignupPage from './pages/common/ClientSignupPage';
 import BarbershopSignupPage from './pages/common/BarbershopSignupPage';
 import NotFoundPage from './pages/common/NotFoundPage';
 import BarbershopPublicPage from './pages/client/BarbershopPublicPage'; 
+import FeaturesPage from './pages/common/FeaturesPage'; // New Import
+import PlansPage from './pages/common/PlansPage'; // New Import
 import BookingPage from './pages/client/BookingPage';
 
 // Client Pages & Layout
@@ -78,6 +80,8 @@ const App: React.FC = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup/client" element={<ClientSignupPage />} />
           <Route path="/signup/barbershop" element={<BarbershopSignupPage />} />
+          <Route path="/features" element={<FeaturesPage />} />
+          <Route path="/plans" element={<PlansPage />} />
           <Route path="/barbershop/:barbershopId" element={<BarbershopPublicPage />} />
           <Route path="/barbershop/:barbershopId/book/:serviceId" element={<BookingPage />} />
         </Route>
