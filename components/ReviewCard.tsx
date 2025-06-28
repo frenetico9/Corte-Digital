@@ -3,7 +3,7 @@ import { Review } from '../types';
 import StarRating from './StarRating';
 import Button from './Button';
 import { format, parseISO } from 'date-fns';
-import ptBR from 'date-fns/locale/pt-BR';
+import { ptBR } from 'date-fns/locale';
 
 interface ReviewCardProps {
   review: Review;

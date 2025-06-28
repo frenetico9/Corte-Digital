@@ -13,7 +13,7 @@ import {
   startOfMonth,
   startOfDay,
 } from 'date-fns';
-import ptBR from 'date-fns/locale/pt-BR';
+import { ptBR } from 'date-fns/locale';
 import Button from './Button';
 
 interface DatePickerProps {

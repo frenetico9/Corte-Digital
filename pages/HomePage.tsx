@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import Button from '../components/Button';
 import { NAVALHA_LOGO_URL, SUBSCRIPTION_PLANS } from '../constants';
 import { useAuth } from '../hooks/useAuth';
-import { BarbershopProfile, BarbershopSearchResultItem, SubscriptionPlan, SubscriptionPlanTier } from '../types';
-import { getPublicBarbershops } from '../services/apiService';
+import { BarbershopSearchResultItem, SubscriptionPlan, SubscriptionPlanTier } from '../types';
+import { mockGetPublicBarbershops } from '../services/mockApiService';
 import LoadingSpinner from '../components/LoadingSpinner';
 import StarRating from '../components/StarRating';
 
@@ -89,9 +89,9 @@ const BarbershopShowcaseCard: React.FC<{ barbershop: BarbershopSearchResultItem 
             {isPro && <ProBadge />}
             <div className="h-40 bg-cover bg-center" style={{backgroundImage: `url(${barbershop.coverImageUrl || 'https://source.unsplash.com/400x300/?barbershop'})`}}></div>
             <div className="p-5">
-                <div className="flex items-center -mt-12 mb-3">
-                    <img src={barbershop.logoUrl || NAVALHA_LOGO_URL} alt={`${barbershop.name} logo`} className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md bg-white"/>
-                    <div className="ml-3 flex-1">
+                <div className="flex items-end -mt-12 mb-3">
+                    <img src={barbershop.logoUrl || NAVALHA_LOGO_URL} alt={`${barbershop.name} logo`} className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md bg-white flex-shrink-0"/>
+                    <div className="ml-3 flex-1 pb-1">
                         <h3 className="text-lg font-bold text-text-dark truncate">{barbershop.name}</h3>
                          {barbershop.reviewCount > 0 && (
                             <div className="flex items-center">
@@ -119,9 +119,9 @@ const BarbershopShowcaseSection: React.FC<{isLoggedIn: boolean}> = ({ isLoggedIn
         const fetchData = async () => {
             setLoading(true);
             try {
-                // Use the new apiService to fetch real data
-                const shops = await getPublicBarbershops();
-                // The API already sorts PRO first, so we just take the top 3 for the showcase
+                // Use the mock apiService to fetch data
+                const shops = await mockGetPublicBarbershops();
+                // The mock API already sorts PRO first, so we just take the top 3 for the showcase
                 setPublicBarbershops(shops.slice(0, 3));
             } catch (error) {
                 console.error("Error fetching public barbershops:", error);
@@ -234,7 +234,7 @@ const HowItWorksSection = () => (
             </div>
             <div className="grid md:grid-cols-2 items-center gap-12">
                 <div className="relative">
-                    <img src="https://i.imgur.com/gK7P6bQ.png" alt="Celular mostrando o app Navalha Digital" className="max-w-xs mx-auto animate-subtle-float" />
+                    <img src="https://iili.io/FRKGVvs.png" alt="Celular mostrando o app Navalha Digital" className="max-w-xs mx-auto animate-subtle-float" />
                 </div>
                 <div className="space-y-8">
                     <div className="flex items-start">
